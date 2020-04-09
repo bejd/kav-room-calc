@@ -1,0 +1,65 @@
+/* ------------------------------- Main layout ------------------------------ */
+html, body {
+	height: 100%
+}
+
+body {
+	display: grid;
+	grid-template-columns:1fr;
+	grid-template-areas:
+					"header"
+					"main"
+					"footer";
+	grid-template-rows: 70px 1fr 70px;
+
+	margin: 0;
+}
+
+header {
+	grid-area: header;
+}
+
+#main-form {
+	grid-area: main;
+	justify-self: center;
+}
+
+footer {
+	grid-area: footer;
+}
+
+/* ------------------------------ Header layout ----------------------------- */
+
+header {
+	display: grid;
+	grid-template-columns: auto 70px;
+	align-items: center;
+}
+
+header div {
+	justify-self: center;
+}
+
+header button {
+	justify-self: right;
+}
+
+/* ------------------------------- Form layout ------------------------------ */
+
+
+
+/* ------------------------------ Footer layout ----------------------------- */
+
+footer {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	align-content: center;
+}
+
+footer p {
+	justify-self: right;
+}
+
+#cost-estimate {
+	justify-self: left;
+}

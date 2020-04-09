@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>King's Audio Visual</title>
+
+	<link rel="stylesheet" href="normalize.css">
+	<link rel="stylesheet" href="layout.css">
+	<link rel="stylesheet" href="theme.css">
+
+	<!-- <script src="script.js"></script> -->
+</head>
+
+<body>
+
+	<header>
+		<div>King's Audio Visual Room Calculator Thing</div>
+		<button>Some button</button>
+	</header>
+
+	<form id="main-form">
+
+		<p>How big is the room?</p>
+		<label for="dimensions-x">Width</label>
+		<input type="text" id="dimensions-x" name="dimensions">
+		<label for="dimensions-y">Depth</label>
+		<input type="text" id="dimensions-y" name="dimensions">
+		<label for="dimensions-z">Height</label>
+		<input type="text" id="dimensions-z" name="dimensions">
+
+		<p>What shape is the room?</p>
+		<input type="radio" id="cuboid" name="shape" value="cuboid">
+		<label for="cuboid">Rectangular</label>
+		<input type="radio" id="cuboid" name="shape" value="cuboid">
+		<label for="cuboid">Wedge</label>
+
+		<p>Some other question</p>
+
+	</form>
+
+	<footer>
+		<p>Estimated cost: £</p>
+		<p id="cost-estimate">40,000</p>
+	</footer>
+
+</body>
+
+</html>

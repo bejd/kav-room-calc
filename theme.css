@@ -1,0 +1,18 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+	background-color: #5a6369;
+}
+
+header div {
+	font-size: 21px;
+	color: #ffffff;
+}
+
+/* ------------------------------ Footer styling ----------------------------- */
+
+footer {
+	background-color: #ffff00;
+}
