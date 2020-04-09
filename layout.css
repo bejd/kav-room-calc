@@ -19,7 +19,7 @@ header {
 	grid-area: header;
 }
 
-#main-form {
+#main {
 	grid-area: main;
 	justify-self: center;
 }
@@ -44,9 +44,17 @@ header button {
 	justify-self: right;
 }
 
-/* ------------------------------- Form layout ------------------------------ */
+/* ------------------------- Form and canvas layout ------------------------- */
 
+#main {
+	display: grid;
+	grid-template-rows: auto 1fr;
+}
 
+/* #visualiser {
+	width: 600px;
+	height: 400px;
+} */
 
 /* ------------------------------ Footer layout ----------------------------- */
 

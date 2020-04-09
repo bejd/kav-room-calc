@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="layout.css">
 	<link rel="stylesheet" href="theme.css">
 
-	<!-- <script src="script.js"></script> -->
+	<script src="script.js"></script>
 </head>
 
 <body>
@@ -22,25 +22,53 @@
 		<button>Some button</button>
 	</header>
 
-	<form id="main-form">
+	<div id="main">
 
-		<p>How big is the room?</p>
-		<label for="dimensions-x">Width</label>
-		<input type="text" id="dimensions-x" name="dimensions">
-		<label for="dimensions-y">Depth</label>
-		<input type="text" id="dimensions-y" name="dimensions">
-		<label for="dimensions-z">Height</label>
-		<input type="text" id="dimensions-z" name="dimensions">
+		<form id="form" autocomplete="off">
 
-		<p>What shape is the room?</p>
-		<input type="radio" id="cuboid" name="shape" value="cuboid">
-		<label for="cuboid">Rectangular</label>
-		<input type="radio" id="cuboid" name="shape" value="cuboid">
-		<label for="cuboid">Wedge</label>
+			<p>What shape is the room?</p>
+			<input type="radio" id="cuboid" name="shape" value="cuboid">
+			<label for="cuboid">Rectangular</label>
+			<input type="radio" id="other" name="shape" value="other">
+			<label for="other">Other</label>
 
-		<p>Some other question</p>
+			<p>What will the room be used for?</p>
+			<input type="radio" id="type-teaching" name="usage" value="teaching">
+			<label for="type-teaching">Teaching</label>
+			<input type="radio" id="type-meeting" name="usage" value="meeting">
+			<label for="type-meeting">Meetings</label>
+			<input type="radio" id="type-vc" name="usage" value="vc">
+			<label for="type-vc">Video conferencing</label>
+			<input type="radio" id="other" name="usage" value="other">
+			<label for="other">Something else</label>
 
-	</form>
+			<p>What is the expected capacity of the room?</p>
+			<label for="capacity">Amount</label>
+			<input type="text" id="capacity" name="capacity">
+
+			<p>How big is the room?</p>
+			<label for="dimensions-x">Width</label>
+			<input type="number" step="any" id="dimensions-x" name="dimensions">
+			<label for="dimensions-y">Depth</label>
+			<input type="number" step="any" id="dimensions-y" name="dimensions">
+			<label for="dimensions-z">Height</label>
+			<input type="number" step="any" id="dimensions-z" name="dimensions">
+
+			<p>Floor area</p>
+			<span id="floor-area"></span>
+
+			<p>Room volume</p>
+			<span id="room-volume"></span>
+
+			<!-- Screen positioning -->
+			<!-- <input type="range"> -->
+
+		</form>
+
+		<canvas id="visualiser" width="600" height="400"></canvas>
+
+	</div>
+
 
 	<footer>
 		<p>Estimated cost: £</p>
