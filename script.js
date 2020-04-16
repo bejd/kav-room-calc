@@ -1,4 +1,4 @@
-var dimX, dimY, dimZ, canvas;
+var dimX, dimY, dimZ, visualiser;
 
 
 document.addEventListener("DOMContentLoaded", (event) => {
@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	dimX = document.getElementById("dimensions-x");
 	dimY = document.getElementById("dimensions-y");
 	dimZ = document.getElementById("dimensions-z");
-	canvas = document.getElementById("visualiser");
+	visualiser = document.getElementById("visualiser");
 
 	// Listen for changes to the dimension boxes
 	dimX.addEventListener("input", function() {
@@ -21,7 +21,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		calcSize();
 	});
 
-	roomVisualiser();
+	// dimX.value = 4; // quick testing
+	// dimY.value = 4; // quick testing
+	// dimZ.value = 2; // quick testing
+
+	// roomVisualiser(); // quick testing
 
 });
 
@@ -50,57 +54,82 @@ function calcSize() {
 	document.getElementById("room-volume").innerHTML = volume + "m&sup3;";
 
 	// Draw the room when all values have been supplied
-	roomVisualiser()
+	clearVis();
+	roomVisualiser();
 
 }
 
 
-// Constants and variables for canvas stuff
-const canvasWidth = 600;
-const canvasHeight = 400;
+// When the room values are changed, remove the
+// current visualiser before adding a new one
+function clearVis() {
+	var visChild = Array.from(visualiser.children);
 
-var wallWidth = 300;
-var wallHeight = 200;
-var roomDepth = 500;
+	visChild.forEach(child => {
+		child.remove();
+	});
+}
+
 
 // Draw a representation of the room to the canvas
 function roomVisualiser() {
+	var canvasWidth = visualiser.clientWidth;
+	var canvasHeight = visualiser.clientHeight;
+	var wallWidth = Number(dimX.value);
+	var wallHeight = Number(dimZ.value);
+	var roomDepth = Number(dimY.value);
 
-	var ctx = canvas.getContext("2d");
-	resFix(ctx);
+	// Setup scene, camera, renderer and add to the DOM
+	var scene = new THREE.Scene();
+	scene.fog = new THREE.Fog(0xffffff, 10, 30);
 
-	var left = (canvasWidth / 2) - (wallWidth / 2);
-	var top = 70;
+	var renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true });
+	renderer.setSize(canvasWidth, canvasHeight);
+	visualiser.appendChild(renderer.domElement);
 
-	ctx.beginPath();
-	ctx.lineWidth = "1";
-	ctx.co
-	ctx.rect(left, top, wallWidth, wallHeight);
-	ctx.strokeStyle = "#acb9c0";
-	ctx.stroke();
+	var camera = new THREE.OrthographicCamera(
+		canvasWidth / -2,
+		canvasWidth / 2,
+		canvasHeight / 2,
+		canvasHeight / -2,
+		1,
+		1000
+	);
 
-	// Use Pythagoras to calculate new offset (depth is hyp, get a and b)
+	// Get the room size and draw the room
+	var room = new THREE.BoxBufferGeometry(wallWidth, wallHeight, roomDepth);
+	var edges = new THREE.EdgesGeometry(room);
+	var material = new THREE.LineBasicMaterial( { color: 0x899197} );
+	var wireframe = new THREE.LineSegments(edges, material);
 
-	ctx.beginPath();
-	ctx.lineWidth = "1";
-	ctx.co
-	ctx.rect(left, top, wallWidth, wallHeight);
-	ctx.strokeStyle = "#acb9c0";
-	ctx.stroke();
-}
+	scene.add(wireframe);
 
+	// Zoom the camera to fit the room based on the longest edge
+	if (wallWidth > wallHeight && wallWidth > roomDepth) {
+		camera.zoom = canvasWidth / (wallWidth * 2);
+	} else if (roomDepth > wallHeight) {
+		camera.zoom = canvasWidth / (roomDepth * 2);
+	} else {
+		camera.zoom = canvasHeight / (wallHeight * 2);
+	}
 
-// Fix blurry drawing on hi res displays
-// https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio
-function resFix(context) {
+	camera.updateProjectionMatrix();
 
-	canvas.style.width = canvasWidth + "px";
-	canvas.style.height = canvasHeight + "px";
+	// Move and adjust the camera angle
+	camera.position.x = 10;
+	camera.position.y = 10;
+	camera.position.z = 10;
 
-	var scale = window.devicePixelRatio;
-	canvas.width = canvasWidth * scale;
-	canvas.height = canvasHeight * scale;
+	camera.lookAt( new THREE.Vector3(0, 0, 0) );
 
-	context.scale(scale, scale);
+	// Render the static scene
+	// Uncomment lines if animation updating is needed
+
+	// function animate() {
+		// requestAnimationFrame(animate);
+		renderer.render(scene, camera);
+	// }
+
+	// animate();
 
 }
