@@ -13,7 +13,8 @@
 	<link rel="stylesheet" href="theme.css">
 
 	<script src="three.js"></script>
-	<script src="script.js"></script>
+	<!-- <script src="script-canvas.js"></script> -->
+	<script src="script-three.js"></script>
 </head>
 
 <body>
@@ -61,11 +62,18 @@
 			<p>Room volume</p>
 			<span id="room-volume"></span>
 
+			<p>What type of display do you want?</p>
+			<input type="radio" id="display-pj" name="display" value="pj">
+			<label for="display-pj">Projector</label>
+			<input type="radio" id="display-tv" name="display" value="tv">
+			<label for="display-tv">TV</label>
+
 			<!-- Screen positioning -->
 			<!-- <input type="range"> -->
 
 		</form>
 
+		<!-- <canvas id="visualiser" width="600" height="400"></canvas> -->
 		<div id="visualiser"></div>
 
 	</div>

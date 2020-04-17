@@ -1,4 +1,4 @@
-var dimX, dimY, dimZ, visualiser;
+var dimX, dimY, dimZ, display, visualiser;
 
 
 document.addEventListener("DOMContentLoaded", (event) => {
@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	dimY = document.getElementById("dimensions-y");
 	dimZ = document.getElementById("dimensions-z");
 	visualiser = document.getElementById("visualiser");
+	display = document.getElementById("display");
 
 	// Listen for changes to the dimension boxes
 	dimX.addEventListener("input", function() {
@@ -21,11 +22,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		calcSize();
 	});
 
-	// dimX.value = 4; // quick testing
-	// dimY.value = 4; // quick testing
-	// dimZ.value = 2; // quick testing
+	dimX.value = 4; // quick testing
+	dimY.value = 4; // quick testing
+	dimZ.value = 2; // quick testing
 
-	// roomVisualiser(); // quick testing
+	calcSize(); // quick testing
 
 });
 
@@ -38,7 +39,6 @@ function calcSize() {
 		// Otherwise clear
 		document.getElementById("floor-area").innerHTML = "";
 		document.getElementById("room-volume").innerHTML = "";
-		clearVis();
 		return;
 	}
 
@@ -48,7 +48,6 @@ function calcSize() {
 	// Don't calculate volume if Z hasn't been entered
 	if (dimZ.value == "") {
 		document.getElementById("room-volume").innerHTML = "";
-		clearVis();
 		return;
 	}
 
@@ -81,15 +80,75 @@ function roomVisualiser() {
 	const wallHeight = Number(dimZ.value);
 	const roomDepth = Number(dimY.value);
 
-	// Setup scene, camera, renderer and add to the DOM
+	// Setup scene and renderer and add to the DOM
 	const scene = new THREE.Scene();
-	scene.fog = new THREE.Fog(0x888888, 10, 30);
 
-	const renderer = new THREE.WebGLRenderer( { alpha: true } );
+	const renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } );
 	renderer.setSize(canvasWidth, canvasHeight);
+	renderer.setPixelRatio( window.devicePixelRatio ); // fix for HiDPI displays
+
 	visualiser.appendChild(renderer.domElement);
 
-	const camera = new THREE.OrthographicCamera(
+	// // Room wireframe
+	// var geometry = new THREE.BoxBufferGeometry(wallWidth, wallHeight, roomDepth);
+	// var edges = new THREE.EdgesGeometry(geometry);
+	// var material = new THREE.LineBasicMaterial( { color: 0x899197} );
+	// var wireframe = new THREE.LineSegments(edges, material);
+
+	// scene.add(wireframe);
+
+	// Back wall
+	var geometry = new THREE.PlaneGeometry(wallWidth, wallHeight);
+	var material = new THREE.MeshStandardMaterial ( { color: 0xf0f1f2 } );
+	var mesh = new THREE.Mesh (geometry, material);
+
+	mesh.position.z = roomDepth / -2;
+
+	scene.add(mesh);
+
+	// Side wall
+	geometry = new THREE.PlaneGeometry(roomDepth, wallHeight);
+	mesh = new THREE.Mesh (geometry, material);
+
+	mesh.position.x = wallWidth / -2;
+	mesh.rotateY(90 * Math.PI / 180);
+
+	scene.add(mesh);
+
+	// Floor
+	geometry = new THREE.PlaneGeometry(wallWidth, roomDepth);
+	// material = new THREE.MeshStandardMaterial ( { color: 0xb9bec2 } );
+	mesh = new THREE.Mesh (geometry, material);
+
+	mesh.position.y = wallHeight / -2;
+	mesh.rotateX(-90 * Math.PI / 180);
+
+	scene.add(mesh);
+
+	// Display
+	const aspect = 1.78;
+	geometry = new THREE.BoxBufferGeometry((wallHeight / 2) * aspect, (wallHeight / 2), 0.05)
+	material = new THREE.MeshStandardMaterial ( { color: 0x757f86 } );
+	mesh = new THREE.Mesh (geometry, material);
+
+	mesh.position.z = (roomDepth / -2) + 0.05;
+	mesh.position.y = wallHeight / 10;
+
+	scene.add(mesh);
+
+	// Light the scene
+	const intensity = 1.5;
+	const light = new THREE.DirectionalLight(0xffffff, intensity);
+	light.position.set(1, 1.25, 1.1);
+
+	scene.add(light)
+
+	// // Debug lights
+	// var helper = new THREE.DirectionalLightHelper(light, 1, 0xb5dde1);
+	// scene.add(helper);
+
+	// Camera setup
+	var camera = new THREE.OrthographicCamera(
 		canvasWidth / -2,
 		canvasWidth / 2,
 		canvasHeight / 2,
@@ -97,43 +156,6 @@ function roomVisualiser() {
 		1,
 		1000
 	);
-
-	// // Wireframe
-	// var geometry = new THREE.BoxBufferGeometry(wallWidth, wallHeight, roomDepth);
-	// const edges = new THREE.EdgesGeometry(geometry);
-	// var material = new THREE.LineBasicMaterial( { color: 0x899197} );
-	// const wireframe = new THREE.LineSegments(edges, material);
-
-	// scene.add(wireframe);
-
-	// Back wall
-	var geometry = new THREE.PlaneGeometry(wallWidth, wallHeight);
-	var material = new THREE.MeshBasicMaterial ( { color: 0xaab0b4 } );
-	var plane = new THREE.Mesh (geometry, material);
-	plane.position.z = roomDepth / -2;
-
-	scene.add(plane);
-
-	// Side wall
-	geometry = new THREE.PlaneGeometry(roomDepth, wallHeight);
-	material = new THREE.MeshBasicMaterial ( { color: 0x899197 } );
-	plane = new THREE.Mesh (geometry, material);
-	plane.position.x = wallWidth / -2;
-	plane.rotateY(90 * Math.PI / 180);
-
-	scene.add(plane);
-
-	// Floor
-	geometry = new THREE.PlaneGeometry(wallWidth, roomDepth);
-	material = new THREE.MeshBasicMaterial ( { color: 0xc7cbce } );
-	plane = new THREE.Mesh (geometry, material);
-	plane.position.y = wallHeight / -2;
-	plane.rotateX(-90 * Math.PI / 180);
-
-	scene.add(plane);
-
-	// Add the display
-	// var display = new THREE.
 
 	// Zoom the camera to fit the room based on the longest edge
 	if (wallWidth > wallHeight && wallWidth > roomDepth) {
@@ -147,9 +169,9 @@ function roomVisualiser() {
 	camera.updateProjectionMatrix();
 
 	// Move and adjust the camera angle
-	camera.position.x = 10;
-	camera.position.y = 10;
-	camera.position.z = 10;
+	camera.position.x = 45;
+	camera.position.y = 30;
+	camera.position.z = 45;
 
 	camera.lookAt( new THREE.Vector3(0, 0, 0) );
 
