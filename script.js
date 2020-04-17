@@ -38,6 +38,7 @@ function calcSize() {
 		// Otherwise clear
 		document.getElementById("floor-area").innerHTML = "";
 		document.getElementById("room-volume").innerHTML = "";
+		clearVis();
 		return;
 	}
 
@@ -47,6 +48,7 @@ function calcSize() {
 	// Don't calculate volume if Z hasn't been entered
 	if (dimZ.value == "") {
 		document.getElementById("room-volume").innerHTML = "";
+		clearVis();
 		return;
 	}
 
@@ -73,21 +75,21 @@ function clearVis() {
 
 // Draw a representation of the room to the canvas
 function roomVisualiser() {
-	var canvasWidth = visualiser.clientWidth;
-	var canvasHeight = visualiser.clientHeight;
-	var wallWidth = Number(dimX.value);
-	var wallHeight = Number(dimZ.value);
-	var roomDepth = Number(dimY.value);
+	const canvasWidth = visualiser.clientWidth;
+	const canvasHeight = visualiser.clientHeight;
+	const wallWidth = Number(dimX.value);
+	const wallHeight = Number(dimZ.value);
+	const roomDepth = Number(dimY.value);
 
 	// Setup scene, camera, renderer and add to the DOM
-	var scene = new THREE.Scene();
-	scene.fog = new THREE.Fog(0xffffff, 10, 30);
+	const scene = new THREE.Scene();
+	scene.fog = new THREE.Fog(0x888888, 10, 30);
 
-	var renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true });
+	const renderer = new THREE.WebGLRenderer( { alpha: true } );
 	renderer.setSize(canvasWidth, canvasHeight);
 	visualiser.appendChild(renderer.domElement);
 
-	var camera = new THREE.OrthographicCamera(
+	const camera = new THREE.OrthographicCamera(
 		canvasWidth / -2,
 		canvasWidth / 2,
 		canvasHeight / 2,
@@ -96,13 +98,42 @@ function roomVisualiser() {
 		1000
 	);
 
-	// Get the room size and draw the room
-	var room = new THREE.BoxBufferGeometry(wallWidth, wallHeight, roomDepth);
-	var edges = new THREE.EdgesGeometry(room);
-	var material = new THREE.LineBasicMaterial( { color: 0x899197} );
-	var wireframe = new THREE.LineSegments(edges, material);
+	// // Wireframe
+	// var geometry = new THREE.BoxBufferGeometry(wallWidth, wallHeight, roomDepth);
+	// const edges = new THREE.EdgesGeometry(geometry);
+	// var material = new THREE.LineBasicMaterial( { color: 0x899197} );
+	// const wireframe = new THREE.LineSegments(edges, material);
 
-	scene.add(wireframe);
+	// scene.add(wireframe);
+
+	// Back wall
+	var geometry = new THREE.PlaneGeometry(wallWidth, wallHeight);
+	var material = new THREE.MeshBasicMaterial ( { color: 0xaab0b4 } );
+	var plane = new THREE.Mesh (geometry, material);
+	plane.position.z = roomDepth / -2;
+
+	scene.add(plane);
+
+	// Side wall
+	geometry = new THREE.PlaneGeometry(roomDepth, wallHeight);
+	material = new THREE.MeshBasicMaterial ( { color: 0x899197 } );
+	plane = new THREE.Mesh (geometry, material);
+	plane.position.x = wallWidth / -2;
+	plane.rotateY(90 * Math.PI / 180);
+
+	scene.add(plane);
+
+	// Floor
+	geometry = new THREE.PlaneGeometry(wallWidth, roomDepth);
+	material = new THREE.MeshBasicMaterial ( { color: 0xc7cbce } );
+	plane = new THREE.Mesh (geometry, material);
+	plane.position.y = wallHeight / -2;
+	plane.rotateX(-90 * Math.PI / 180);
+
+	scene.add(plane);
+
+	// Add the display
+	// var display = new THREE.
 
 	// Zoom the camera to fit the room based on the longest edge
 	if (wallWidth > wallHeight && wallWidth > roomDepth) {
