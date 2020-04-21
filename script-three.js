@@ -3,6 +3,7 @@ var screenType, screenWidth, screenHeight					// Screen sizes
 var pjPos, dspPos;											// Positions
 var lectX, lectY, lectZ										// Lectern
 var lectPos = "left";
+var cameraAngle = "iso";									// Camera angle
 var visualiser, canvasWidth, canvasHeight, renderer, scene;	// Three.js things
 var drawRoom = false;
 
@@ -59,6 +60,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		});
 	});
 
+	options = Array.from(document.getElementsByClassName("cam-buttons")[0].children);
+	options.forEach(option => {
+		option.addEventListener("click", function() {
+			setCamAngle(option.value);
+		});
+	});
+
 	pjPos.addEventListener("change", function() {
 		setProjectorPos();
 	});
@@ -68,7 +76,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	});
 
 	// Create the three.js renderer and scene
-	createScene()
+	createScene();
 
 	// Uncomment for testing
 	// dimX.value = 5;
@@ -88,9 +96,10 @@ function calcSize() {
 	// Make sure X and Y have been entered correctly
 	if (dimX.value == "" || dimY.value == "" ) {
 		// Otherwise clear
-		document.getElementById("floor-area").innerHTML = "";
-		document.getElementById("room-volume").innerHTML = "";
+		document.getElementById("floor-area").innerHTML = "m&sup2;";
+		document.getElementById("room-volume").innerHTML = "m&sup3;";
 		drawRoom = false;
+		showVisualiser(false);
 		clearScene();
 		return;
 	}
@@ -100,8 +109,9 @@ function calcSize() {
 
 	// Don't calculate volume if Z hasn't been entered
 	if (dimZ.value == "") {
-		document.getElementById("room-volume").innerHTML = "";
+		document.getElementById("room-volume").innerHTML = "m&sup3;";
 		drawRoom = false;
+		showVisualiser(false);
 		clearScene();
 		return;
 	}
@@ -113,6 +123,7 @@ function calcSize() {
 	drawRoom = true;
 	if (screenWidth == undefined) setScreenSize(55);
 	renderRoom();
+	showVisualiser(true);
 }
 
 
@@ -170,6 +181,15 @@ function setScreenSize(diag) {
 	screenHeight = aRHght * factor;
 
 	// If any dimension values are yet to be filled, don't draw the scene
+	if (drawRoom == false) return;
+	renderRoom();
+}
+
+
+// Set the camera angle
+function setCamAngle(angle) {
+	cameraAngle = angle;
+
 	if (drawRoom == false) return;
 	renderRoom();
 }
@@ -235,6 +255,7 @@ function renderRoom() {
 
 	// Draw display if one has been selected
 	if (screenType != undefined) {
+
 		// Calculate X offset for later
 		var wallPos = (wallWidth / -2) + (wallWidth * (dspPos.value / 100));
 
@@ -342,6 +363,30 @@ function renderRoom() {
 	scene.add(mesh);
 
 
+	// Draw left and right speakers
+	geometry = new THREE.BoxBufferGeometry( 0.215, 0.365, 0.215 ); // QSC AD-S6T
+	material = new THREE.MeshStandardMaterial ( { color: 0x757f86 } );
+	mesh = new THREE.Mesh (geometry, material);
+
+	var spkrInset = 0.1;
+
+	mesh.position.x = (wallWidth / -2) + (0.215 / 2) + spkrInset;
+	mesh.position.y = (wallHeight / 2) - (0.365 / 2) - spkrInset;
+	mesh.position.z = (roomDepth / -2) + (0.215 / 2) + spkrInset;
+	mesh.castShadow = true;
+
+	savedPosition = mesh.position;
+	scene.add(mesh);
+
+	mesh = new THREE.Mesh (geometry, material);
+
+	mesh.position.set(savedPosition.x, savedPosition.y, savedPosition.z);
+	mesh.position.x = (wallWidth / 2) - (0.215 / 2) - spkrInset;
+	mesh.castShadow = true;
+
+	scene.add(mesh);
+
+
 	// Light the scene
 	const lightIntensity = 1.5;
 	var light = new THREE.DirectionalLight(0xffffff, lightIntensity);
@@ -366,9 +411,15 @@ function renderRoom() {
 	);
 
 	// Move and adjust the camera angle
-	camera.position.x = 45;
-	camera.position.y = 30;
-	camera.position.z = 45;
+	if (cameraAngle == "iso") {
+		camera.position.set(45, 30, 45);
+	} else if (cameraAngle == "side") {
+		camera.position.set(45, 0, 0);
+	} else if (cameraAngle == "top") {
+		camera.position.set(0, 30, 0);
+	} else if (cameraAngle == "back") {
+		camera.position.set(0, 0, 45);
+	}
 
 	camera.lookAt( new THREE.Vector3(0, 0, 0) );
 
@@ -381,11 +432,26 @@ function renderRoom() {
 
 	// Render the static scene
 	renderer.render(scene, camera);
+
 }
 
 
+// Remove all objects from the scene so they can be re-drawn
 function clearScene() {
 	while (scene.children.length > 0) {
 		scene.remove(scene.children[0]);
 	}
+}
+
+
+// Show or hide the visualiser
+function showVisualiser(opt) {
+	if (opt) {
+		visualiser.classList.add("right-side");
+	}
+
+	else if (!opt) {
+		visualiser.classList.remove("right-side");
+	}
+
 }

@@ -21,7 +21,6 @@ header {
 
 #main {
 	grid-area: main;
-	justify-self: center;
 }
 
 footer {
@@ -51,11 +50,6 @@ header button {
 	grid-template-rows: auto 1fr;
 }
 
-#visualiser {
-	width: 600px;
-	height: 600px;
-}
-
 /* ------------------------------ Footer layout ----------------------------- */
 
 footer {
@@ -70,4 +64,32 @@ footer p {
 
 #cost-estimate {
 	justify-self: left;
+}
+
+/* --------------------------- Floating visualiser -------------------------- */
+
+#visualiser {
+	width: 600px;
+	height: 600px;
+
+	position: fixed;
+	bottom: 2em;
+	right: -610px;
+
+	transition: all 0.5s ease-in-out;
+}
+
+#visualiser.right-side {
+	right: 2em;
+}
+
+#visualiser canvas {
+	position: absolute;
+	top: 0;
+	z-index: -1;
+}
+
+.cam-buttons {
+	display: flex;
+	justify-content: space-evenly;
 }

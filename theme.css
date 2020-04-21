@@ -15,6 +15,10 @@ header div {
 
 /* ------------------------------ Form styling ------------------------------ */
 
+#main {
+	justify-self: center;
+}
+
 #form p {
 	margin-top: 3em;
 }
@@ -44,13 +48,15 @@ footer {
 	background-color: #ffff00;
 }
 
-/* ----------------------------- Canvas styling ----------------------------- */
+/* --------------------------- Visualiser styling --------------------------- */
 
 #visualiser {
-	margin-top: 3em;
-	justify-self: center;
-
 	border: 1px solid #cdd6db;
+	background-color: #ffffff;
+}
+
+.cam-buttons {
+	margin-top: 1em;
 }
 
 /* ------------------------ Temporary debug elements ------------------------ */
