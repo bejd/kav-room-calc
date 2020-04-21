@@ -34,6 +34,10 @@ input[type=number] {
 	-moz-appearance: textfield;
 }
 
+input[type=range] {
+	display: block;
+}
+
 /* ----------------------------- Footer styling ----------------------------- */
 
 footer {
@@ -47,4 +51,16 @@ footer {
 	justify-self: center;
 
 	border: 1px solid #cdd6db;
+}
+
+/* ------------------------ Temporary debug elements ------------------------ */
+
+.debug-options {
+	margin-top: 3em;
+	padding: 1em;
+	background-color: #ffe1e1;
+}
+
+#form .debug-options p:first-child {
+	margin-top: 0;
 }
