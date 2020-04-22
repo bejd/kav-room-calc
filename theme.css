@@ -16,7 +16,13 @@ header div {
 /* ------------------------------ Form styling ------------------------------ */
 
 #main {
-	justify-self: center;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+#form {
+	width: 50em;
+	margin-left: 5em;
 }
 
 #form p {
@@ -56,7 +62,11 @@ footer {
 }
 
 .cam-buttons {
-	margin-top: 1em;
+	margin: 1em;
+	padding: 1em;
+	background-color: #d7dbe750;
+
+	font-size: 0.7em;
 }
 
 /* ------------------------ Temporary debug elements ------------------------ */

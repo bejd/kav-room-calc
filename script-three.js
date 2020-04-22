@@ -1,6 +1,13 @@
+var costBox, cost = 0;										// Estimate costs
+var costsDict = {
+	"roomSize": 0,
+	"display": 0,
+	"speakers": 0,
+	"lectern": 0
+};
 var dimX, dimY, dimZ;										// Room variables
 var screenType, screenWidth, screenHeight					// Screen sizes
-var pjPos, dspPos;											// Positions
+var pjPos, scrPos;											// Positions
 var lectX, lectY, lectZ										// Lectern
 var lectPos = "left";
 var cameraAngle = "iso";									// Camera angle
@@ -10,11 +17,12 @@ var drawRoom = false;
 
 document.addEventListener("DOMContentLoaded", (event) => {
 
+	costBox = document.getElementById("cost-estimate");
 	dimX = document.getElementById("dimensions-x");
 	dimY = document.getElementById("dimensions-y");
 	dimZ = document.getElementById("dimensions-z");
 	pjPos = document.getElementById("pjPosition");
-	dspPos = document.getElementById("displayPosition");
+	scrPos = document.getElementById("displayPosition");
 
 	visualiser = document.getElementById("visualiser");
 
@@ -71,7 +79,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		setProjectorPos();
 	});
 
-	dspPos.addEventListener("change", function() {
+	scrPos.addEventListener("change", function() {
 		setDisplayPos();
 	});
 
@@ -79,9 +87,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	createScene();
 
 	// Uncomment for testing
-	// dimX.value = 5;
+	// dimX.value = 8;
 	// dimY.value = 4;
-	// dimZ.value = 2;
+	// dimZ.value = 3;
 
 	// setLecternSize("sml");
 	// setScreenType("pj");
@@ -105,7 +113,7 @@ function calcSize() {
 	}
 
 	var area = dimX.value * dimY.value;
-	document.getElementById("floor-area").innerHTML = area + "m&sup2;";
+	document.getElementById("floor-area").innerHTML = +area.toFixed(2) + "m&sup2;";
 
 	// Don't calculate volume if Z hasn't been entered
 	if (dimZ.value == "") {
@@ -117,7 +125,10 @@ function calcSize() {
 	}
 
 	var volume = area * dimZ.value;
-	document.getElementById("room-volume").innerHTML = volume + "m&sup3;";
+	document.getElementById("room-volume").innerHTML = +volume.toFixed(2) + "m&sup3;";
+
+	var costPerSqM = 1000;
+	updateCost("roomSize", area * costPerSqM);
 
 	// Draw the room when all values have been supplied
 	drawRoom = true;
@@ -133,12 +144,14 @@ function setLecternSize(size) {
 		lectX = 1.200;
 		lectY = 1.022;
 		lectZ = 0.700;
+		updateCost("lectern", 3984.29);
 	}
 
 	else if (size = "lrg") {
 		lectX = 1.810;
 		lectY = 1.000;
 		lectZ = 0.700;
+		updateCost("lectern", 5345.71);
 	}
 
 	// If any dimension values are yet to be filled, don't draw the scene
@@ -160,6 +173,11 @@ function setLecternPosition(pos) {
 function setScreenType(type) {
 	screenType = type;
 
+	// Temp set testing costs
+	if (screenType == "pj") {
+		updateCost("display", 2670);
+	}
+
 	if (drawRoom == false) return;
 	renderRoom();
 }
@@ -167,6 +185,30 @@ function setScreenType(type) {
 
 // Set the screen size
 function setScreenSize(diag) {
+	// Temp set testing costs
+	var scrCost = 0;
+	if (screenType == "pj") {
+		scrCost = 2670;
+	}
+	else if (screenType == "tv") {
+		if (diag == "55") {
+			scrCost = 1000;
+		}
+		else if (diag == "65") {
+			scrCost = 1554;
+		}
+		else if (diag == "75") {
+			scrCost = 2194;
+		}
+		else if (diag == "85") {
+			scrCost = 3867;
+		}
+		else if (diag == "98") {
+			scrCost = 11334;
+		}
+	}
+	updateCost("display", scrCost);
+
 	//Convert inches to metres
 	diag = diag * 0.0254;
 
@@ -257,13 +299,15 @@ function renderRoom() {
 	if (screenType != undefined) {
 
 		// Calculate X offset for later
-		var wallPos = (wallWidth / -2) + (wallWidth * (dspPos.value / 100));
+		var wallPos = (wallWidth / -2) + (wallWidth * (scrPos.value / 100));
 
-		if (dspPos.value < 50) {
-			wallPos += (screenWidth / 2) * ((100 - dspPos.value) / 100);
-		} else if (dspPos.value > 50) {
-			wallPos -= (screenWidth / 2) * (dspPos.value / 100);
-		}
+		// Convert percentage to range
+		const rngLow = -100;
+		const rngHigh = 100;
+		const scrOffset = rngLow + (scrPos.value * (rngHigh - rngLow) / 100);
+
+		wallPos += (screenWidth / -2) * (scrOffset / 100);
+
 
 		// Make a dark screen for a TV
 		if (screenType == "tv") {
@@ -277,7 +321,7 @@ function renderRoom() {
 			screenThick = 0.02;
 
 			// Draw the projector
-			geometry = new THREE.BoxBufferGeometry( 0.8, 0.2, 0.5 );
+			geometry = new THREE.BoxBufferGeometry( 0.498, 0.168, 0.492 ); // PT-RZ570
 			material = new THREE.MeshStandardMaterial ( { color: 0x757f86 } );
 			mesh = new THREE.Mesh (geometry, material);
 
@@ -432,7 +476,6 @@ function renderRoom() {
 
 	// Render the static scene
 	renderer.render(scene, camera);
-
 }
 
 
@@ -454,4 +497,17 @@ function showVisualiser(opt) {
 		visualiser.classList.remove("right-side");
 	}
 
+}
+
+
+// Update the displayed cost by reading the costs object
+function updateCost(key, value) {
+	costsDict[key] = value;
+	cost = 0;
+
+	for (let [key, value] of Object.entries(costsDict)) {
+		cost += value;
+	}
+
+	costBox.innerHTML = cost.toLocaleString();
 }

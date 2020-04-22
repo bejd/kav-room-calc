@@ -43,11 +43,10 @@ header button {
 	justify-self: right;
 }
 
-/* ------------------------- Form and canvas layout ------------------------- */
+/* ------------------------------- Form layout ------------------------------ */
 
 #main {
 	display: grid;
-	grid-template-rows: auto 1fr;
 }
 
 /* ------------------------------ Footer layout ----------------------------- */
@@ -73,7 +72,7 @@ footer p {
 	height: 600px;
 
 	position: fixed;
-	bottom: 2em;
+	bottom: 5.375em;
 	right: -610px;
 
 	transition: all 0.5s ease-in-out;
