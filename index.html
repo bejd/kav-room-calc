@@ -29,34 +29,62 @@
 		<form id="form" autocomplete="off">
 
 			<p>What shape is the room?</p>
-			<input type="radio" id="cuboid" name="shape" value="cuboid">
-			<label for="cuboid">Rectangular</label>
-			<input type="radio" id="other" name="shape" value="other">
-			<label for="other">Other</label>
+			<div class="option-flex">
+				<label for="cuboid">
+					<input type="radio" id="cuboid" name="shape" value="cuboid">
+					Rectangular
+				</label>
+				<label for="other">
+					<input type="radio" id="other" name="shape" value="other">
+					Other
+				</label>
+			</div>
 
 			<p>What will the room be used for?</p>
-			<input type="radio" id="type-teaching" name="usage" value="teaching">
-			<label for="type-teaching">Teaching</label>
-			<input type="radio" id="type-meeting" name="usage" value="meeting">
-			<label for="type-meeting">Meetings</label>
-			<input type="radio" id="type-vc" name="usage" value="vc">
-			<label for="type-vc">Video conferencing</label>
-			<input type="radio" id="type-event" name="usage" value="event">
-			<label for="type-event">Events</label>
-			<input type="radio" id="other" name="usage" value="other">
-			<label for="other">Something else</label>
+			<div class="option-flex">
+				<label>
+					<input type="radio" id="type-teaching" name="usage" value="teaching">
+					Teaching
+				</label>
+				<label for="type-meeting">
+					<input type="radio" id="type-meeting" name="usage" value="meeting">
+					Meetings
+				</label>
+				<label for="type-vc">
+					<input type="radio" id="type-vc" name="usage" value="vc">
+					Video conferencing
+				</label>
+				<label for="type-event">
+					<input type="radio" id="type-event" name="usage" value="event">
+					Events
+				</label>
+				<label for="other">
+					<input type="radio" id="other" name="usage" value="other">
+					Something else
+				</label>
+			</div>
 
 			<p>What is the expected capacity of the room?</p>
-			<label for="capacity">Amount</label>
-			<input type="text" id="capacity" name="capacity">
+			<label for="capacity">
+				<span class="input-text">Amount</span>
+				<input type="text" id="capacity" name="capacity">
+			</label>
 
 			<p>How big is the room?</p>
-			<label for="dimensions-x">Width</label>
-			<input type="number" step="any" id="dimensions-x" name="dimensions">
-			<label for="dimensions-y">Depth</label>
-			<input type="number" step="any" id="dimensions-y" name="dimensions">
-			<label for="dimensions-z">Height</label>
-			<input type="number" step="any" id="dimensions-z" name="dimensions">
+			<div class="option-flex">
+				<label for="dimensions-x">
+					<span class="input-text">Width</span>
+					<input type="number" step="any" id="dimensions-x" name="dimensions">
+				</label>
+				<label for="dimensions-y">
+					<span class="input-text">Depth</span>
+					<input type="number" step="any" id="dimensions-y" name="dimensions">
+				</label>
+				<label for="dimensions-z">
+					<span class="input-text">Height</span>
+					<input type="number" step="any" id="dimensions-z" name="dimensions">
+				</label>
+			</div>
 
 			<p>Floor area</p>
 			<span id="floor-area">m&sup2;</span>
@@ -65,41 +93,72 @@
 			<span id="room-volume">m&sup3;</span>
 
 			<p>Lectern size</p>
-			<input type="radio" id="lect-sml" name="lect-size" value="sml">
-			<label for="lect-sml">Small</label>
-			<input type="radio" id="lect-lrg" name="lect-size" value="lrg">
-			<label for="lect-lrg">Large</label>
+			<div class="option-flex">
+				<label for="lect-sml">
+					<input type="radio" id="lect-sml" name="lect-size" value="sml">
+					Small
+				</label>
+				<label for="lect-lrg">
+					<input type="radio" id="lect-lrg" name="lect-size" value="lrg">
+					Large
+				</label>
+			</div>
 
 			<p>Lectern position</p>
-			<input type="radio" id="lect-left" name="lect-pos" value="left" checked>
-			<label for="lect-left">Left</label>
-			<input type="radio" id="lect-right" name="lect-pos" value="right">
-			<label for="lect-right">Right</label>
+			<div class="option-flex">
+				<label for="lect-left">
+					<input type="radio" id="lect-left" name="lect-pos" value="left" checked>
+					Left
+				</label>
+				<label for="lect-right">
+					<input type="radio" id="lect-right" name="lect-pos" value="right">
+					Right
+				</label>
+			</div>
 
 			<p>Display position</p>
 			<input type="range" id="displayPosition" min="0" max="100" value="50">
 
 			<div class="debug-options">
 				<p>Type of display</p>
-				<input type="radio" id="display-pj" name="display" value="pj">
-				<label for="display-pj">Projector</label>
-				<input type="radio" id="display-tv" name="display" value="tv">
-				<label for="display-tv">TV</label>
+				<div class="option-flex">
+					<label for="display-pj">
+						<input type="radio" id="display-pj" name="display" value="pj">
+						Projector
+					</label>
+					<label for="display-tv">
+						<input type="radio" id="display-tv" name="display" value="tv">
+						TV
+					</label>
+				</div>
 
 				<p>Screen size</p>
-				<input type="radio" id="size-55" name="tv-size" value="55">
-				<label for="size-55">55 inch</label>
-				<input type="radio" id="size-65" name="tv-size" value="65">
-				<label for="size-65">65 inch</label>
-				<input type="radio" id="size-75" name="tv-size" value="75">
-				<label for="size-75">75 inch</label>
-				<input type="radio" id="size-85" name="tv-size" value="85">
-				<label for="size-85">85 inch</label>
-				<input type="radio" id="size-98" name="tv-size" value="98">
-				<label for="size-98">98 inch</label>
+				<div class="option-flex">
+					<label for="size-55">
+						<input type="radio" id="size-55" name="tv-size" value="55" checked>
+						55 inch
+					</label>
+					<label for="size-65">
+						<input type="radio" id="size-65" name="tv-size" value="65">
+						65 inch
+					</label>
+					<label for="size-75">
+						<input type="radio" id="size-75" name="tv-size" value="75">
+						75 inch
+					</label>
+					<label for="size-85">
+						<input type="radio" id="size-85" name="tv-size" value="85">
+						85 inch
+					</label>
+					<label for="size-98">
+						<input type="radio" id="size-98" name="tv-size" value="98">
+						98 inch
+					</label>
+				</div>
 
 				<p>Projector position</p>
 				<input type="range" id="pjPosition" min="0" max="100" value="50">
+
 			</div>
 
 		</form>

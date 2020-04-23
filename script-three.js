@@ -5,11 +5,13 @@ var costsDict = {
 	"speakers": 0,
 	"lectern": 0
 };
-var dimX, dimY, dimZ;										// Room variables
+var dimX, dimY, dimZ;										// Room dimensions
 var screenType, screenWidth, screenHeight					// Screen sizes
 var pjPos, scrPos;											// Positions
 var lectX, lectY, lectZ										// Lectern
 var lectPos = "left";
+// var minViewer = 1.5;										// Viewer distances
+// var maxViewer;
 var cameraAngle = "iso";									// Camera angle
 var visualiser, canvasWidth, canvasHeight, renderer, scene;	// Three.js things
 var drawRoom = false;
@@ -280,16 +282,16 @@ function renderRoom() {
 
 	// Create a cube with material on the inside only, gives the
 	// effect of looking through outer walls to inside of room
-	var geometry = new THREE.BoxBufferGeometry(wallWidth, wallHeight, roomDepth);
-	var material = new THREE.MeshStandardMaterial ( { color: 0xf0f1f2, side: THREE.BackSide } );
-	var mesh = new THREE.Mesh (geometry, material);
+	var geometry = new THREE.BoxBufferGeometry( wallWidth, wallHeight, roomDepth );
+	var material = new THREE.MeshStandardMaterial( { color: 0xf0f1f2, side: THREE.BackSide } );
+	var mesh = new THREE.Mesh( geometry, material );
 
 	scene.add(mesh);
 
 	// Draw identical cube but with a shadow receiving material
 	material = new THREE.ShadowMaterial( { side: THREE.BackSide } );
 	material.opacity = 0.05;
-	mesh = new THREE.Mesh (geometry, material);
+	mesh = new THREE.Mesh( geometry, material );
 	mesh.receiveShadow = true;
 
 	scene.add(mesh);
@@ -322,8 +324,8 @@ function renderRoom() {
 
 			// Draw the projector
 			geometry = new THREE.BoxBufferGeometry( 0.498, 0.168, 0.492 ); // PT-RZ570
-			material = new THREE.MeshStandardMaterial ( { color: 0x757f86 } );
-			mesh = new THREE.Mesh (geometry, material);
+			material = new THREE.MeshStandardMaterial( { color: 0x757f86 } );
+			mesh = new THREE.Mesh( geometry, material );
 
 			// Initially position projector to ceiling and front of room
 			mesh.position.y = (wallHeight / 2) - (0.2 / 2);
@@ -348,8 +350,8 @@ function renderRoom() {
 			screenHeight,
 			screenThick
 		);
-		material = new THREE.MeshStandardMaterial ( { color: screenColor } );
-		mesh = new THREE.Mesh (geometry, material);
+		material = new THREE.MeshStandardMaterial( { color: screenColor } );
+		mesh = new THREE.Mesh( geometry, material );
 
 		mesh.position.x = wallPos;
 		mesh.position.y = wallHeight / 10;
@@ -375,8 +377,8 @@ function renderRoom() {
 
 	// Draw a lectern
 	geometry = new THREE.BoxBufferGeometry( lectX, lectY, lectZ );
-	material = new THREE.MeshStandardMaterial ( { color: 0x868375 } );
-	mesh = new THREE.Mesh (geometry, material);
+	material = new THREE.MeshStandardMaterial( { color: 0x868375 } );
+	mesh = new THREE.Mesh ( geometry, material );
 
 	// Move lectern to front of room
 	var sittingGap = 0.7;
@@ -399,7 +401,7 @@ function renderRoom() {
 	// Shadow receiver
 	material = new THREE.ShadowMaterial();
 	material.opacity = 0.05;
-	mesh = new THREE.Mesh (geometry, material);
+	mesh = new THREE.Mesh ( geometry, material );
 
 	mesh.position.set(savedPosition.x, savedPosition.y, savedPosition.z);
 	mesh.receiveShadow = true;
@@ -407,9 +409,21 @@ function renderRoom() {
 	scene.add(mesh);
 
 
+	//Draw plane to visualise viewer distances
+	// geometry = new THREE.PlaneGeometry( wallWidth - 1, roomDepth - 2, 1, 1 );
+	// material = new THREE.MeshStandardMaterial( { color: 0x86757f } );
+	// mesh = new THREE.Mesh( geometry, material );
+
+	// mesh.rotateX( -90 * Math.PI / 180);
+	// mesh.position.y = (wallHeight / -2) + 0.01;
+	// mesh.position.z = (roomDepth / -2) + 2;
+
+	// scene.add(mesh);
+
+
 	// Draw left and right speakers
 	geometry = new THREE.BoxBufferGeometry( 0.215, 0.365, 0.215 ); // QSC AD-S6T
-	material = new THREE.MeshStandardMaterial ( { color: 0x757f86 } );
+	material = new THREE.MeshStandardMaterial( { color: 0x757f86 } );
 	mesh = new THREE.Mesh (geometry, material);
 
 	var spkrInset = 0.1;
@@ -422,7 +436,7 @@ function renderRoom() {
 	savedPosition = mesh.position;
 	scene.add(mesh);
 
-	mesh = new THREE.Mesh (geometry, material);
+	mesh = new THREE.Mesh( geometry, material );
 
 	mesh.position.set(savedPosition.x, savedPosition.y, savedPosition.z);
 	mesh.position.x = (wallWidth / 2) - (0.215 / 2) - spkrInset;
@@ -433,7 +447,7 @@ function renderRoom() {
 
 	// Light the scene
 	const lightIntensity = 1.5;
-	var light = new THREE.DirectionalLight(0xffffff, lightIntensity);
+	var light = new THREE.DirectionalLight( 0xffffff, lightIntensity );
 	light.position.set(1, 1.25, 1.1);
 	light.castShadow = true;
 
@@ -465,7 +479,7 @@ function renderRoom() {
 		camera.position.set(0, 0, 45);
 	}
 
-	camera.lookAt( new THREE.Vector3(0, 0, 0) );
+	camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
 
 	// Zoom camera to fit the diagonal of the room
 	var floorDiag = Math.sqrt(Math.pow(wallWidth, 2) + Math.pow(roomDepth, 2));
