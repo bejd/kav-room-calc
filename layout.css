@@ -92,3 +92,10 @@ footer p {
 	display: flex;
 	justify-content: space-evenly;
 }
+
+/* --------------------------------- Dialog --------------------------------- */
+
+dialog {
+	width: 400px;
+	top: 40%;
+}

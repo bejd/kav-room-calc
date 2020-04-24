@@ -30,12 +30,12 @@
 
 			<p>What shape is the room?</p>
 			<div class="option-flex">
-				<label for="cuboid">
+				<label>
 					<input type="radio" id="cuboid" name="shape" value="cuboid">
 					Rectangular
 				</label>
-				<label for="other">
-					<input type="radio" id="other" name="shape" value="other">
+				<label>
+					<input type="radio" id="other" name="shape" value="other" class="restricted">
 					Other
 				</label>
 			</div>
@@ -59,30 +59,30 @@
 					Events
 				</label>
 				<label for="other">
-					<input type="radio" id="other" name="usage" value="other">
+					<input type="radio" id="other" name="usage" value="other" class="restricted">
 					Something else
 				</label>
 			</div>
 
 			<p>What is the expected capacity of the room?</p>
-			<label for="capacity">
+			<label>
 				<span class="input-text">Amount</span>
 				<input type="text" id="capacity" name="capacity">
 			</label>
 
 			<p>How big is the room?</p>
 			<div class="option-flex">
-				<label for="dimensions-x">
+				<label>
 					<span class="input-text">Width</span>
 					<input type="number" step="any" id="dimensions-x" name="dimensions">
 				</label>
-				<label for="dimensions-y">
+				<label>
 					<span class="input-text">Depth</span>
-					<input type="number" step="any" id="dimensions-y" name="dimensions">
-				</label>
-				<label for="dimensions-z">
-					<span class="input-text">Height</span>
 					<input type="number" step="any" id="dimensions-z" name="dimensions">
+				</label>
+				<label>
+					<span class="input-text">Height</span>
+					<input type="number" step="any" id="dimensions-y" name="dimensions">
 				</label>
 			</div>
 
@@ -94,11 +94,11 @@
 
 			<p>Lectern size</p>
 			<div class="option-flex">
-				<label for="lect-sml">
+				<label>
 					<input type="radio" id="lect-sml" name="lect-size" value="sml">
 					Small
 				</label>
-				<label for="lect-lrg">
+				<label>
 					<input type="radio" id="lect-lrg" name="lect-size" value="lrg">
 					Large
 				</label>
@@ -106,11 +106,11 @@
 
 			<p>Lectern position</p>
 			<div class="option-flex">
-				<label for="lect-left">
+				<label>
 					<input type="radio" id="lect-left" name="lect-pos" value="left" checked>
 					Left
 				</label>
-				<label for="lect-right">
+				<label>
 					<input type="radio" id="lect-right" name="lect-pos" value="right">
 					Right
 				</label>
@@ -122,11 +122,11 @@
 			<div class="debug-options">
 				<p>Type of display</p>
 				<div class="option-flex">
-					<label for="display-pj">
+					<label>
 						<input type="radio" id="display-pj" name="display" value="pj">
 						Projector
 					</label>
-					<label for="display-tv">
+					<label>
 						<input type="radio" id="display-tv" name="display" value="tv">
 						TV
 					</label>
@@ -134,23 +134,23 @@
 
 				<p>Screen size</p>
 				<div class="option-flex">
-					<label for="size-55">
+					<label>
 						<input type="radio" id="size-55" name="tv-size" value="55" checked>
 						55 inch
 					</label>
-					<label for="size-65">
+					<label>
 						<input type="radio" id="size-65" name="tv-size" value="65">
 						65 inch
 					</label>
-					<label for="size-75">
+					<label>
 						<input type="radio" id="size-75" name="tv-size" value="75">
 						75 inch
 					</label>
-					<label for="size-85">
+					<label>
 						<input type="radio" id="size-85" name="tv-size" value="85">
 						85 inch
 					</label>
-					<label for="size-98">
+					<label>
 						<input type="radio" id="size-98" name="tv-size" value="98">
 						98 inch
 					</label>
@@ -158,6 +158,18 @@
 
 				<p>Projector position</p>
 				<input type="range" id="pjPosition" min="0" max="100" value="50">
+
+				<p>Viewer distances</p>
+				<div class="option-flex">
+					<label>
+						<span class="input-text">Minimum</span>
+						<input type="number" step="any" id="min-viewer" name="viewer">
+					</label>
+					<label>
+						<span class="input-text">Maximum</span>
+						<input type="number" step="any" id="max-viewer" name="viewer">
+					</label>
+				</div>
 
 			</div>
 
@@ -179,6 +191,14 @@
 		<p>Estimated cost: £</p>
 		<p id="cost-estimate">0</p>
 	</footer>
+
+	<dialog id="dialog">
+		<div id="dialog-flex" class="dialog-flex">
+			<p>To discuss a different setup, please email us by clicking the button below.</p>
+			<button onclick="sendEmail()">Email</button>
+			<button onclick="hideDialog()">Go Back</button>
+		</div>
+	</dialog>
 
 </body>
 

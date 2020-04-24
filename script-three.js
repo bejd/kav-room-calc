@@ -10,39 +10,32 @@ var screenType, screenWidth, screenHeight					// Screen sizes
 var pjPos, scrPos;											// Positions
 var lectX, lectY, lectZ										// Lectern
 var lectPos = "left";
-// var minViewer = 1.5;										// Viewer distances
-// var maxViewer;
+var minViewer = 0, maxViewer = 0;							// Viewer distances
 var cameraAngle = "iso";									// Camera angle
 var visualiser, canvasWidth, canvasHeight, renderer, scene;	// Three.js things
 var drawRoom = false;
+var dialog, optGroup;										// Dialog things
 
 
 document.addEventListener("DOMContentLoaded", (event) => {
-
 	costBox = document.getElementById("cost-estimate");
-	dimX = document.getElementById("dimensions-x");
-	dimY = document.getElementById("dimensions-y");
-	dimZ = document.getElementById("dimensions-z");
-	pjPos = document.getElementById("pjPosition");
-	scrPos = document.getElementById("displayPosition");
-
 	visualiser = document.getElementById("visualiser");
+	dialog = document.getElementById("dialog");
 
-	// Listen for changes to the dimension boxes
-	dimX.addEventListener("input", function() {
-		calcSize();
+	// Create the three.js renderer and scene
+	createScene();
+
+	// Add listeners to the various form items. Each input type will call a
+	// different function to set variables etc. Once all dimensions have been
+	// input the function to draw the visualiser will be called.
+	var options = Array.from(document.querySelectorAll("input[name = 'dimensions']"));
+	options.forEach(option => {
+		option.addEventListener("input", function() {
+			calcSize(this.id, option.value);
+		});
 	});
 
-	dimY.addEventListener("input", function() {
-		calcSize();
-	});
-
-	dimZ.addEventListener("input", function() {
-		calcSize();
-	});
-
-	// Listen for changes to radio buttons
-	var options = Array.from(document.querySelectorAll("input[name = 'lect-pos']"));
+	options = Array.from(document.querySelectorAll("input[name = 'lect-pos']"));
 	options.forEach(option => {
 		option.addEventListener("click", function() {
 			setLecternPosition(option.value);
@@ -70,28 +63,41 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		});
 	});
 
+	options = Array.from(document.querySelectorAll("input[name = 'viewer']"));
+	options.forEach(option => {
+		option.addEventListener("input", function() {
+			setViewerDist(this.id, option.value);
+		});
+	});
+
 	options = Array.from(document.getElementsByClassName("cam-buttons")[0].children);
 	options.forEach(option => {
-		option.addEventListener("click", function() {
+		option.addEventListener("keypress", function() {
 			setCamAngle(option.value);
 		});
 	});
 
-	pjPos.addEventListener("change", function() {
-		setProjectorPos();
+	pjPos = document.getElementById("pjPosition").value; // store initial value
+	document.getElementById("pjPosition").addEventListener("change", function() {
+		setProjectorPos(this.value);
 	});
 
-	scrPos.addEventListener("change", function() {
-		setDisplayPos();
+	scrPos = document.getElementById("displayPosition").value;
+	document.getElementById("displayPosition").addEventListener("change", function() {
+		setDisplayPos(this.value);
 	});
 
-	// Create the three.js renderer and scene
-	createScene();
+	options = Array.from(document.getElementsByClassName("restricted"));
+	options.forEach(option => {
+		option.addEventListener("click", function() {
+			showDialog(this.name);
+		});
+	});
 
 	// Uncomment for testing
-	// dimX.value = 8;
-	// dimY.value = 4;
-	// dimZ.value = 3;
+	// dimX = 8;
+	// dimY = 3;
+	// dimZ = 5;
 
 	// setLecternSize("sml");
 	// setScreenType("pj");
@@ -101,10 +107,73 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 
 
+// Show dialog overlay
+function showDialog(opt) {
+	// Store the group for being cleared later
+	optGroup = opt;
+
+	// Create a new <p>
+	var elem = document.createElement("p");
+	var msg;
+
+	// Set the text node on what's calling the dialog
+	if (opt == "shape") {
+		msg = document.createTextNode("This calculator is designed for rectangular rooms only.");
+	}
+	else if (opt == "usage") {
+		msg = document.createTextNode("This calculator is designed for basic usage only.");
+	}
+
+	elem.appendChild(msg);
+
+	// Add the new <p> as first child of the dialog flex
+	var dialogFlex = document.getElementById("dialog-flex");
+	dialogFlex.insertAdjacentElement("afterbegin", elem);
+
+	dialog.show();
+}
+
+
+// Hide the dialog and reset things
+function hideDialog() {
+	// Remove the <p> set by showDialog
+	var dialogFlex = document.getElementById("dialog-flex");
+	dialogFlex.removeChild(dialogFlex.childNodes[0]);
+
+	// Deselect any the flagged option
+	var options = Array.from(document.querySelectorAll("input[name = '" + optGroup + "']"));
+	options.forEach(option => option.checked = false);
+
+	dialog.close();
+}
+
+
+// Send an email using default program on button click
+function sendEmail() {
+	var link = "mailto:rodrigo.sanchez-pizani@kcl.ac.uk"
+			 + "&subject=Test";
+
+	window.location.href = link;
+
+	hideDialog();
+}
+
+
 // Calculate room area and volume from user entered dimensions
-function calcSize() {
-	// Make sure X and Y have been entered correctly
-	if (dimX.value == "" || dimY.value == "" ) {
+function calcSize(box, val) {
+	// Store box values
+	if (box == "dimensions-x") {
+		dimX = val;
+	}
+	else if (box == "dimensions-y") {
+		dimY = val;
+	}
+	else if (box == "dimensions-z") {
+		dimZ = val;
+	}
+
+	// Make sure X and Z have been entered correctly
+	if (dimX == undefined || dimX == "" || dimZ== undefined || dimZ == "") {
 		// Otherwise clear
 		document.getElementById("floor-area").innerHTML = "m&sup2;";
 		document.getElementById("room-volume").innerHTML = "m&sup3;";
@@ -114,11 +183,11 @@ function calcSize() {
 		return;
 	}
 
-	var area = dimX.value * dimY.value;
+	var area = dimX * dimZ;
 	document.getElementById("floor-area").innerHTML = +area.toFixed(2) + "m&sup2;";
 
-	// Don't calculate volume if Z hasn't been entered
-	if (dimZ.value == "") {
+	// Don't calculate volume if Y hasn't been entered
+	if (dimY == undefined || dimY == "") {
 		document.getElementById("room-volume").innerHTML = "m&sup3;";
 		drawRoom = false;
 		showVisualiser(false);
@@ -126,7 +195,7 @@ function calcSize() {
 		return;
 	}
 
-	var volume = area * dimZ.value;
+	var volume = area * dimY;
 	document.getElementById("room-volume").innerHTML = +volume.toFixed(2) + "m&sup3;";
 
 	var costPerSqM = 1000;
@@ -240,14 +309,32 @@ function setCamAngle(angle) {
 
 
 // Redraw the room when projector distance slider changes
-function setProjectorPos() {
+function setProjectorPos(value) {
+	pjPos = value;
+
 	if (drawRoom == false) return;
 	renderRoom();
 }
 
 
 // Redraw the room when projector distance slider changes
-function setDisplayPos() {
+function setDisplayPos(value) {
+	scrPos = value;
+
+	if (drawRoom == false) return;
+	renderRoom();
+}
+
+
+// Store variables for minimum/maximum viewer distances
+function setViewerDist(box, dist) {
+	if (box == "min-viewer") {
+		minViewer = dist;
+	}
+	else if (box == "max-viewer") {
+		maxViewer = dist;
+	}
+
 	if (drawRoom == false) return;
 	renderRoom();
 }
@@ -272,9 +359,9 @@ function createScene() {
 
 // Update the room visualisation
 function renderRoom() {
-	const wallWidth = Number(dimX.value);
-	const wallHeight = Number(dimZ.value);
-	const roomDepth = Number(dimY.value);
+	const wallWidth = Number(dimX);
+	const wallHeight = Number(dimY);
+	const roomDepth = Number(dimZ);
 	var savedPosition;
 
 	// First, remove any other objects
@@ -301,12 +388,12 @@ function renderRoom() {
 	if (screenType != undefined) {
 
 		// Calculate X offset for later
-		var wallPos = (wallWidth / -2) + (wallWidth * (scrPos.value / 100));
+		var wallPos = (wallWidth / -2) + (wallWidth * (scrPos / 100));
 
 		// Convert percentage to range
 		const rngLow = -100;
 		const rngHigh = 100;
-		const scrOffset = rngLow + (scrPos.value * (rngHigh - rngLow) / 100);
+		const scrOffset = rngLow + (scrPos * (rngHigh - rngLow) / 100);
 
 		wallPos += (screenWidth / -2) * (scrOffset / 100);
 
@@ -334,7 +421,7 @@ function renderRoom() {
 			// Offset Z position
 			var pjCeilingDist = 0.1;
 			var pjMaxDist = roomDepth - 0.5;
-			var pjScreenDist = pjMaxDist * (1 / (100 / -(pjPos.value - 100)));
+			var pjScreenDist = pjMaxDist * (1 / (100 / -(pjPos - 100)));
 
 			mesh.position.x = wallPos;
 			mesh.position.y -= pjCeilingDist;
@@ -409,14 +496,16 @@ function renderRoom() {
 	scene.add(mesh);
 
 
-	//Draw plane to visualise viewer distances
-	// geometry = new THREE.PlaneGeometry( wallWidth - 1, roomDepth - 2, 1, 1 );
+	// Draw plane to visualise viewer distances
+	var viewDepth = maxViewer - minViewer;
+
+	// geometry = new THREE.PlaneGeometry( wallWidth - 1, viewDepth, 1, 1 );
 	// material = new THREE.MeshStandardMaterial( { color: 0x86757f } );
 	// mesh = new THREE.Mesh( geometry, material );
 
 	// mesh.rotateX( -90 * Math.PI / 180);
 	// mesh.position.y = (wallHeight / -2) + 0.01;
-	// mesh.position.z = (roomDepth / -2) + 2;
+	// mesh.position.z = - (roomDepth / 2) + (viewDepth / 2) + minViewer;
 
 	// scene.add(mesh);
 
