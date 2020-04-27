@@ -49,6 +49,21 @@ header button {
 	display: grid;
 }
 
+
+/* ---------------------------- Form hiding stuff --------------------------- */
+
+#form > * {
+	transition: all 0.5s ease-in-out;
+}
+
+#form > .display-none {
+	display: none;
+}
+
+#form > .opacity-zero {
+	opacity: 0;
+}
+
 /* ------------------------------ Footer layout ----------------------------- */
 
 footer {

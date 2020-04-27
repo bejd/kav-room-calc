@@ -5,6 +5,7 @@ var costsDict = {
 	"speakers": 0,
 	"lectern": 0
 };
+var formItems;												// Form display
 var dimX, dimY, dimZ;										// Room dimensions
 var screenType, screenWidth, screenHeight					// Screen sizes
 var pjPos, scrPos;											// Positions
@@ -18,80 +19,111 @@ var dialog, optGroup;										// Dialog things
 
 
 document.addEventListener("DOMContentLoaded", (event) => {
+	formItems = Array.from(document.getElementById("form").children);
 	costBox = document.getElementById("cost-estimate");
-	visualiser = document.getElementById("visualiser");
 	dialog = document.getElementById("dialog");
+	visualiser = document.getElementById("visualiser");
 
 	// Create the three.js renderer and scene
 	createScene();
 
+	// Add class to show initial items. Items will be revealed as form is filled
+	// in by calling the unhideItems() function
+	formItems.forEach(child => {
+		if (formItems.indexOf(child) > 1) {
+			// child.style.display = "block";
+			child.classList.add("display-none");
+			child.classList.add("opacity-zero");
+		}
+	});
+
 	// Add listeners to the various form items. Each input type will call a
 	// different function to set variables etc. Once all dimensions have been
 	// input the function to draw the visualiser will be called.
-	var options = Array.from(document.querySelectorAll("input[name = 'dimensions']"));
-	options.forEach(option => {
-		option.addEventListener("input", function() {
-			calcSize(this.id, option.value);
+	var inputs = Array.from(document.querySelectorAll("input"));
+	inputs.forEach(input => {
+
+		// Separate from the below if/else as can also be set to inputs.
+		// Needs to be first as must be called before the below so can prevent
+		// normal function.
+		if (input.classList.contains("restricted")) {
+			input.addEventListener("click", function() {
+				showDialog(this.name);
+			});
+		}
+
+		if (input.name == "shape") {
+			input.addEventListener("click", function() {
+				setShape(input, input.value);
+			});
+		}
+
+		else if (input.name == "usage") {
+			input.addEventListener("click", function() {
+				setUsage(input, input.value);
+			});
+		}
+
+		else if (input.name == "dimensions") {
+			input.addEventListener("input", function() {
+				calcSize(input, this.id, input.value);
+			});
+		}
+
+		else if (input.name == "lect-size") {
+			input.addEventListener("click", function() {
+				setLecternSize(input, input.value);
+			});
+		}
+
+		else if (input.name == "lect-pos") {
+			input.addEventListener("click", function() {
+				setLecternPosition(input.value);
+			});
+		}
+
+		else if (input.id == "displayPosition") {
+			scrPos = input.value;
+			input.addEventListener("change", function() {
+				setDisplayPos(this.value);
+			});
+		}
+
+		else if (input.name == "display") {
+			input.addEventListener("click", function() {
+				setScreenType(input.value);
+			});
+		}
+
+		else if (input.name == "tv-size") {
+			input.addEventListener("click", function() {
+				setScreenSize(input.value);
+			});
+		}
+
+		else if (input.id == "pjPosition") {
+			pjPos = input.value;
+			input.addEventListener("change", function() {
+				setProjectorPos(this.value);
+			});
+		}
+
+		else if (input.name == "viewer") {
+			input.addEventListener("click", function() {
+				setViewerDist(this.id, input.value);
+			});
+		}
+
+	});
+
+	// Add functions to camera buttons
+	var buttons = Array.from(document.getElementsByClassName("cam-buttons")[0].children);
+	buttons.forEach(button => {
+
+		button.addEventListener("click", function() {
+			setCamAngle(button.value);
 		});
-	});
 
-	options = Array.from(document.querySelectorAll("input[name = 'lect-pos']"));
-	options.forEach(option => {
-		option.addEventListener("click", function() {
-			setLecternPosition(option.value);
-		});
-	});
-
-	options = Array.from(document.querySelectorAll("input[name = 'lect-size']"));
-	options.forEach(option => {
-		option.addEventListener("click", function() {
-			setLecternSize(option.value);
-		});
-	});
-
-	options = Array.from(document.querySelectorAll("input[name = 'display']"));
-	options.forEach(option => {
-		option.addEventListener("click", function() {
-			setScreenType(option.value);
-		});
-	});
-
-	options = Array.from(document.querySelectorAll("input[name = 'tv-size']"));
-	options.forEach(option => {
-		option.addEventListener("click", function() {
-			setScreenSize(option.value);
-		});
-	});
-
-	options = Array.from(document.querySelectorAll("input[name = 'viewer']"));
-	options.forEach(option => {
-		option.addEventListener("input", function() {
-			setViewerDist(this.id, option.value);
-		});
-	});
-
-	options = Array.from(document.getElementsByClassName("cam-buttons")[0].children);
-	options.forEach(option => {
-		option.addEventListener("keypress", function() {
-			setCamAngle(option.value);
-		});
-	});
-
-	pjPos = document.getElementById("pjPosition").value; // store initial value
-	document.getElementById("pjPosition").addEventListener("change", function() {
-		setProjectorPos(this.value);
-	});
-
-	scrPos = document.getElementById("displayPosition").value;
-	document.getElementById("displayPosition").addEventListener("change", function() {
-		setDisplayPos(this.value);
-	});
-
-	options = Array.from(document.getElementsByClassName("restricted"));
-	options.forEach(option => {
-		option.addEventListener("click", function() {
-			showDialog(this.name);
-		});
 	});
 
 	// Uncomment for testing
@@ -105,6 +137,27 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	// calcSize();
 
 });
+
+
+// Get the next elements in the form and add the class to show it
+function unhideItems(ele, num) {
+	var start = formItems.indexOf(ele);
+
+	for (var i = 1; i <= num; i++) {
+		// Make the element a block/flex/whatever again
+		formItems[start + i].classList.remove("display-none");
+		// After a delay, fade it in
+		setTimeout(
+			function (e) {
+				e.classList.remove("opacity-zero");
+			},
+			0,
+			formItems[start + i]
+		);
+
+	}
+}
+
 
 
 // Show dialog overlay
@@ -158,9 +211,27 @@ function sendEmail() {
 	hideDialog();
 }
 
+// Ensure room shape has been set to rectangular
+function setShape(ele, shape) {
+	if (dialog.open) return;
+
+	var parent = ele.parentNode.parentNode;
+	unhideItems(parent, 2)
+
+}
+
+
+//
+function setUsage(ele, use) {
+	if (dialog.open) return;
+
+	var parent = ele.parentNode.parentNode;
+	unhideItems(parent, 2);
+}
+
 
 // Calculate room area and volume from user entered dimensions
-function calcSize(box, val) {
+function calcSize(ele, box, val) {
 	// Store box values
 	if (box == "dimensions-x") {
 		dimX = val;
@@ -186,6 +257,9 @@ function calcSize(box, val) {
 	var area = dimX * dimZ;
 	document.getElementById("floor-area").innerHTML = +area.toFixed(2) + "m&sup2;";
 
+	var parent = ele.parentNode.parentNode;
+	unhideItems(parent, 2);
+
 	// Don't calculate volume if Y hasn't been entered
 	if (dimY == undefined || dimY == "") {
 		document.getElementById("room-volume").innerHTML = "m&sup3;";
@@ -197,6 +271,8 @@ function calcSize(box, val) {
 
 	var volume = area * dimY;
 	document.getElementById("room-volume").innerHTML = +volume.toFixed(2) + "m&sup3;";
+
+	unhideItems(parent, 8);
 
 	var costPerSqM = 1000;
 	updateCost("roomSize", area * costPerSqM);
@@ -210,7 +286,7 @@ function calcSize(box, val) {
 
 
 // Set the lectern size
-function setLecternSize(size) {
+function setLecternSize(ele, size) {
 	if (size == "sml") {
 		lectX = 1.200;
 		lectY = 1.022;
@@ -224,6 +300,9 @@ function setLecternSize(size) {
 		lectZ = 0.700;
 		updateCost("lectern", 5345.71);
 	}
+
+	var parent = ele.parentNode.parentNode;
+	unhideItems(parent, 5);
 
 	// If any dimension values are yet to be filled, don't draw the scene
 	if (drawRoom == false) return;

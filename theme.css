@@ -91,7 +91,7 @@ footer {
 
 dialog {
 	border: 1px solid #cdd6db;
-	box-shadow: ;
+	box-shadow: 0.5em 0.5em 0.75em 0px #00000080;
 }
 
 dialog button {
