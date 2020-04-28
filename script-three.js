@@ -7,11 +7,15 @@ var costsDict = {
 };
 var formItems;												// Form display
 var dimX, dimY, dimZ;										// Room dimensions
+var roomMat;												// Room material
+
 var screenType, screenWidth, screenHeight					// Screen sizes
 var pjPos, scrPos;											// Positions
+var whiteboard;												// Equipment
 var lectX, lectY, lectZ										// Lectern
 var lectPos = "left";
 var minViewer = 0, maxViewer = 0;							// Viewer distances
+
 var cameraAngle = "iso";									// Camera angle
 var visualiser, canvasWidth, canvasHeight, renderer, scene;	// Three.js things
 var drawRoom = false;
@@ -52,15 +56,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
 			});
 		}
 
-		if (input.name == "shape") {
+		// If/else for each option in the form
+		 if (input.name == "usage") {
 			input.addEventListener("click", function() {
-				setShape(input, input.value);
+				setUsage(input, input.value);
 			});
 		}
 
-		else if (input.name == "usage") {
+		else if (input.name == "shape") {
 			input.addEventListener("click", function() {
-				setUsage(input, input.value);
+				setShape(input, input.value);
 			});
 		}
 
@@ -70,9 +75,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
 			});
 		}
 
-		else if (input.name == "lect-size") {
+		else if (input.name == "materials") {
 			input.addEventListener("click", function() {
-				setLecternSize(input, input.value);
+				setMaterial(input, input.value);
+			});
+		}
+
+		else if (input.id == "displayPosition") {
+			scrPos = input.value;
+			input.addEventListener("change", function() {
+				setDisplayPos(this.value);
+			});
+		}
+
+		else if (input.name == "equip-type") {
+			input.addEventListener("click", function() {
+				setEquipment(input, input.value);
 			});
 		}
 
@@ -82,10 +100,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
 			});
 		}
 
-		else if (input.id == "displayPosition") {
-			scrPos = input.value;
-			input.addEventListener("change", function() {
-				setDisplayPos(this.value);
+		else if (input.name == "writing-surface") {
+			input.addEventListener("click", function() {
+				setWhiteboard(input, input.value);
 			});
 		}
 
@@ -131,7 +148,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	// dimY = 3;
 	// dimZ = 5;
 
-	// setLecternSize("sml");
+	// setEquipment("sml");
 	// setScreenType("pj");
 
 	// calcSize();
@@ -141,7 +158,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 // Get the next elements in the form and add the class to show it
 function unhideItems(ele, num) {
-	var start = formItems.indexOf(ele);
+	var parent = ele.parentNode.parentNode;
+	var start = formItems.indexOf(parent);
 
 	for (var i = 1; i <= num; i++) {
 		// Make the element a block/flex/whatever again
@@ -159,8 +177,8 @@ function unhideItems(ele, num) {
 }
 
 
-
-// Show dialog overlay
+// Show dialog overlay and set the message based on which selection has caused
+// the dialog to be called.
 function showDialog(opt) {
 	// Store the group for being cleared later
 	optGroup = opt;
@@ -171,10 +189,14 @@ function showDialog(opt) {
 
 	// Set the text node on what's calling the dialog
 	if (opt == "shape") {
-		msg = document.createTextNode("This calculator is designed for rectangular rooms only.");
+		msg = document.createTextNode(
+			"This calculator is designed for rectangular rooms only."
+		);
 	}
 	else if (opt == "usage") {
-		msg = document.createTextNode("This calculator is designed for basic usage only.");
+		msg = document.createTextNode(
+			"This calculator is designed for basic uses only."
+		);
 	}
 
 	elem.appendChild(msg);
@@ -204,31 +226,29 @@ function hideDialog() {
 // Send an email using default program on button click
 function sendEmail() {
 	var link = "mailto:rodrigo.sanchez-pizani@kcl.ac.uk"
-			 + "&subject=Test";
+			 + "?subject=Make me a room, Rodders";
 
-	window.location.href = link;
+	window.open(link);
 
 	hideDialog();
 }
+
+
+// Set room usage, ensure nothing extravagent
+function setUsage(ele, use) {
+	if (dialog.open) return;
+
+	unhideItems(ele, 2);
+}
+
 
 // Ensure room shape has been set to rectangular
 function setShape(ele, shape) {
 	if (dialog.open) return;
 
-	var parent = ele.parentNode.parentNode;
-	unhideItems(parent, 2)
+	unhideItems(ele, 2)
 
 }
-
-
-//
-function setUsage(ele, use) {
-	if (dialog.open) return;
-
-	var parent = ele.parentNode.parentNode;
-	unhideItems(parent, 2);
-}
-
 
 // Calculate room area and volume from user entered dimensions
 function calcSize(ele, box, val) {
@@ -248,17 +268,12 @@ function calcSize(ele, box, val) {
 		// Otherwise clear
 		document.getElementById("floor-area").innerHTML = "m&sup2;";
 		document.getElementById("room-volume").innerHTML = "m&sup3;";
+		document.getElementById("capacity").innerHTML = "";
 		drawRoom = false;
 		showVisualiser(false);
 		clearScene();
 		return;
 	}
-
-	var area = dimX * dimZ;
-	document.getElementById("floor-area").innerHTML = +area.toFixed(2) + "m&sup2;";
-
-	var parent = ele.parentNode.parentNode;
-	unhideItems(parent, 2);
 
 	// Don't calculate volume if Y hasn't been entered
 	if (dimY == undefined || dimY == "") {
@@ -269,40 +284,57 @@ function calcSize(ele, box, val) {
 		return;
 	}
 
-	var volume = area * dimY;
-	document.getElementById("room-volume").innerHTML = +volume.toFixed(2) + "m&sup3;";
-
-	unhideItems(parent, 8);
-
-	var costPerSqM = 1000;
-	updateCost("roomSize", area * costPerSqM);
+	unhideItems(ele, 2);
 
 	// Draw the room when all values have been supplied
-	drawRoom = true;
+	calculateRoom();
+
 	if (screenWidth == undefined) setScreenSize(55);
+
+	drawRoom = true;
 	renderRoom();
 	showVisualiser(true);
 }
 
 
+// Set the wall material
+function setMaterial(ele, mat) {
+	roomMat = mat;
+
+	unhideItems(ele, 10);
+
+	if (drawRoom == false) return;
+	calculateRoom();
+	renderRoom();
+}
+
+
+// Redraw the room when projector distance slider changes
+function setDisplayPos(value) {
+	scrPos = value;
+
+	if (drawRoom == false) return;
+	renderRoom();
+}
+
+
 // Set the lectern size
-function setLecternSize(ele, size) {
+function setEquipment(ele, size) {
 	if (size == "sml") {
 		lectX = 1.200;
 		lectY = 1.022;
 		lectZ = 0.700;
-		updateCost("lectern", 3984.29);
+		calculateCost("lectern", 3984.29);
 	}
 
 	else if (size = "lrg") {
 		lectX = 1.810;
 		lectY = 1.000;
 		lectZ = 0.700;
-		updateCost("lectern", 5345.71);
+		calculateCost("lectern", 5345.71);
 	}
 
-	var parent = ele.parentNode.parentNode;
-	unhideItems(parent, 5);
+	unhideItems(ele, 5);
 
 	// If any dimension values are yet to be filled, don't draw the scene
 	if (drawRoom == false) return;
@@ -319,13 +351,23 @@ function setLecternPosition(pos) {
 }
 
 
+// Does the user want a whiteboard
+function setWhiteboard(ele, sel) {
+	whiteboard = sel;
+
+	// If any dimension values are yet to be filled, don't draw the scene
+	if (drawRoom == false) return;
+	renderRoom();
+}
+
+
 // Set the screen type
 function setScreenType(type) {
 	screenType = type;
 
 	// Temp set testing costs
 	if (screenType == "pj") {
-		updateCost("display", 2670);
+		calculateCost("display", 2670);
 	}
 
 	if (drawRoom == false) return;
@@ -357,7 +399,7 @@ function setScreenSize(diag) {
 			scrCost = 11334;
 		}
 	}
-	updateCost("display", scrCost);
+	calculateCost("display", scrCost);
 
 	//Convert inches to metres
 	diag = diag * 0.0254;
@@ -378,27 +420,9 @@ function setScreenSize(diag) {
 }
 
 
-// Set the camera angle
-function setCamAngle(angle) {
-	cameraAngle = angle;
-
-	if (drawRoom == false) return;
-	renderRoom();
-}
-
-
 // Redraw the room when projector distance slider changes
 function setProjectorPos(value) {
 	pjPos = value;
-
-	if (drawRoom == false) return;
-	renderRoom();
-}
-
-
-// Redraw the room when projector distance slider changes
-function setDisplayPos(value) {
-	scrPos = value;
 
 	if (drawRoom == false) return;
 	renderRoom();
@@ -413,6 +437,15 @@ function setViewerDist(box, dist) {
 	else if (box == "max-viewer") {
 		maxViewer = dist;
 	}
+
+	if (drawRoom == false) return;
+	renderRoom();
+}
+
+
+// Set the camera angle
+function setCamAngle(angle) {
+	cameraAngle = angle;
 
 	if (drawRoom == false) return;
 	renderRoom();
@@ -683,7 +716,7 @@ function showVisualiser(opt) {
 
 
 // Update the displayed cost by reading the costs object
-function updateCost(key, value) {
+function calculateCost(key, value) {
 	costsDict[key] = value;
 	cost = 0;
 
@@ -692,4 +725,45 @@ function updateCost(key, value) {
 	}
 
 	costBox.innerHTML = cost.toLocaleString();
+}
+
+
+// Create an asynchronous request to the server, sending the user form data.
+// The PHP server in turn passes the values to a Python script. The response
+// returned is a JSON string which is parsed before being passed to the
+// setRoomData which reads the dictionary and processes the data
+function calculateRoom() {
+	var requestObj = new XMLHttpRequest();
+
+	// What to do when receiving the response to the below
+	requestObj.onload = function() {
+		setRoomData(JSON.parse(this.response));
+		console.log(JSON.parse(this.response));
+	};
+
+	requestObj.open(
+		"get",
+		"calc.php?x=" + dimX
+			  + "&y=" + dimY
+			  + "&z=" + dimZ
+			  + "&m=" + roomMat,
+		true
+	);
+	requestObj.send();
+}
+
+
+// Process the data received from the calculateRoom function
+function setRoomData(roomData) {
+	var area = roomData["area"];
+	document.getElementById("floor-area").innerHTML = +area.toFixed(2) + "m&sup2;";
+
+	var volume = roomData["volume"];
+	document.getElementById("room-volume").innerHTML = +volume.toFixed(2) + "m&sup3;";
+
+	var capacity = roomData["capacity"];
+	document.getElementById("capacity").innerHTML = capacity.toFixed(0) + " people";
+
+	var costPerSqM = 1000;
+	calculateCost("roomSize", area * costPerSqM);
 }

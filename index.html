@@ -28,18 +28,6 @@
 
 		<form id="form" autocomplete="off">
 
-			<p>What shape is the room?</p>
-			<div class="option-flex">
-				<label>
-					<input type="radio" id="cuboid" name="shape" value="cuboid">
-					Rectangular
-				</label>
-				<label>
-					<input type="radio" id="other" name="shape" value="other" class="restricted">
-					Other
-				</label>
-			</div>
-
 			<p>What will the room be used for?</p>
 			<div class="option-flex">
 				<label>
@@ -64,6 +52,18 @@
 				</label>
 			</div>
 
+			<p>What shape is the room?</p>
+			<div class="option-flex">
+				<label>
+					<input type="radio" id="cuboid" name="shape" value="cuboid">
+					Rectangular
+				</label>
+				<label>
+					<input type="radio" id="other" name="shape" value="other" class="restricted">
+					Other
+				</label>
+			</div>
+
 			<p>How big is the room?</p>
 			<div class="option-flex">
 				<label>
@@ -80,24 +80,39 @@
 				</label>
 			</div>
 
+			<p>What materials are the walls made from?</p>
+			<div class="option-flex">
+				<label>
+					<input type="radio" id="mat-hard" name="materials" value="hard">
+					Hard
+				</label>
+				<label>
+					<input type="radio" id="mat-soft" name="materials" value="soft">
+					Soft
+				</label>
+			</div>
+
 			<p>Floor area</p>
 			<span id="floor-area">m&sup2;</span>
 
 			<p>Room volume</p>
 			<span id="room-volume">m&sup3;</span>
 
-			<p>Expected capacity</p>
-			<span id="capacity">100</span>
+			<p>Estimated capacity</p>
+			<span id="capacity"></span>
 
-			<p>Lectern size</p>
+			<p>Display position</p>
+			<input type="range" id="displayPosition" min="0" max="100" value="50">
+
+			<p>Do you need a visualiser?</p>
 			<div class="option-flex">
 				<label>
-					<input type="radio" id="lect-sml" name="lect-size" value="sml">
-					Small
+					<input type="radio" id="lect-lrg" name="equip-type" value="lrg">
+					Yes
 				</label>
 				<label>
-					<input type="radio" id="lect-lrg" name="lect-size" value="lrg">
-					Large
+					<input type="radio" id="lect-sml" name="equip-type" value="sml">
+					No
 				</label>
 			</div>
 
@@ -113,8 +128,21 @@
 				</label>
 			</div>
 
-			<p>Display position</p>
-			<input type="range" id="displayPosition" min="0" max="100" value="50">
+			<p>Do you need a surface to write on?</p>
+			<div class="option-flex">
+				<label>
+					<input type="radio" id="surface-wbd" name="writing-surface" value="wbd">
+					Whiteboard
+				</label>
+				<label>
+					<input type="radio" id="surface-bbd" name="writing-surface" value="bbd">
+					Blackboard
+				</label>
+				<label>
+					<input type="radio" id="surface-dg-wbd" name="writing-surface" value="dg-wbd">
+					Digital whiteboard
+				</label>
+			</div>
 
 			<div class="debug-options">
 				<p>Type of display</p>
