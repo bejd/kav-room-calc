@@ -1,4 +1,5 @@
 /* ------------------------------- Main layout ------------------------------ */
+
 html, body {
 	height: 100%
 }
@@ -8,9 +9,8 @@ body {
 	grid-template-columns:1fr;
 	grid-template-areas:
 					"header"
-					"main"
-					"footer";
-	grid-template-rows: 70px 1fr 70px;
+					"main";
+	grid-template-rows: 70px 1fr;
 
 	margin: 0;
 }
@@ -23,9 +23,6 @@ header {
 	grid-area: main;
 }
 
-footer {
-	grid-area: footer;
-}
 
 /* ------------------------------ Header layout ----------------------------- */
 
@@ -42,6 +39,7 @@ header div {
 header button {
 	justify-self: right;
 }
+
 
 /* ------------------------------- Form layout ------------------------------ */
 
@@ -64,21 +62,27 @@ header button {
 	opacity: 0;
 }
 
-/* ------------------------------ Footer layout ----------------------------- */
 
-footer {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	align-content: center;
+/* ----------------------------- Floating footer ---------------------------- */
+
+#cost-box {
+	width: 300px;
+
+	position: fixed;
+	bottom: 2em;
+	left: -310px;
+
+	transition: all 0.5s ease-in-out;
 }
 
-footer p {
-	justify-self: right;
+#cost-box p {
+	text-align: center;
 }
 
-#cost-estimate {
-	justify-self: left;
+#cost-box.show {
+	left: 2em;
 }
+
 
 /* --------------------------- Floating visualiser -------------------------- */
 
@@ -87,13 +91,13 @@ footer p {
 	height: 600px;
 
 	position: fixed;
-	bottom: 5.375em;
+	bottom: 2em;
 	right: -610px;
 
 	transition: all 0.5s ease-in-out;
 }
 
-#visualiser.right-side {
+#visualiser.show {
 	right: 2em;
 }
 
@@ -107,6 +111,7 @@ footer p {
 	display: flex;
 	justify-content: space-evenly;
 }
+
 
 /* --------------------------------- Dialog --------------------------------- */
 

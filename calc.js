@@ -2,7 +2,14 @@
 // returned data.
 
 var cost = 0;										// Total cost
+var costBox;
 var costsDict = {};									// Individual item costs
+
+
+
+document.addEventListener("DOMContentLoaded", (event) => {
+	costBox = document.getElementById("cost-box");
+});
 
 
 // Add new entries to the costs dictionary, then total the values and display
@@ -15,7 +22,9 @@ function calculateCost(key, value) {
 		cost += value;
 	}
 
-	document.getElementById("cost-estimate").innerHTML = cost.toLocaleString();
+	document.getElementById("cost-estimate").innerHTML =
+		"Estimated cost: "
+		+ cost.toLocaleString();
 }
 
 

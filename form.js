@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 		else if (input.name == "dimensions") {
 			input.addEventListener("input", function() {
-				calcSize(input, this.id, input.value);
+				setSize(input, this.id, input.value);
 			});
 		}
 
@@ -195,8 +195,8 @@ function setShape(ele, shape) {
 
 }
 
-// Calculate room area and volume from user entered dimensions
-function calcSize(ele, box, val) {
+// Store room area and volume from user entered dimensions
+function setSize(ele, box, val) {
 	// Store box values
 	if (box == "dimensions-x") {
 		dimX = val;
@@ -215,7 +215,7 @@ function calcSize(ele, box, val) {
 		document.getElementById("room-volume").innerHTML = "m&sup3;";
 		document.getElementById("capacity").innerHTML = "";
 		drawRoom = false;
-		showVisualiser(false);
+		showBox(visualiser, false);
 		clearScene();
 		return;
 	}
@@ -224,7 +224,7 @@ function calcSize(ele, box, val) {
 	if (dimY == undefined || dimY == "") {
 		document.getElementById("room-volume").innerHTML = "m&sup3;";
 		drawRoom = false;
-		showVisualiser(false);
+		showBox(visualiser, false);
 		clearScene();
 		return;
 	}
@@ -238,7 +238,7 @@ function calcSize(ele, box, val) {
 
 	drawRoom = true;
 	renderRoom();
-	showVisualiser(true);
+	showBox(visualiser, true);
 }
 
 
@@ -248,6 +248,7 @@ function setMaterial(ele, mat) {
 
 	unhideItems(ele, 10);
 
+	// If any dimension values are yet to be filled, don't draw the scene
 	if (drawRoom == false) return;
 	calculateRoom();
 	renderRoom();
@@ -281,7 +282,6 @@ function setEquipment(ele, size) {
 
 	unhideItems(ele, 5);
 
-	// If any dimension values are yet to be filled, don't draw the scene
 	if (drawRoom == false) return;
 	renderRoom();
 }
@@ -300,8 +300,9 @@ function setLecternPosition(pos) {
 function setWhiteboard(ele, sel) {
 	whiteboard = sel;
 
-	// If any dimension values are yet to be filled, don't draw the scene
+	// If all options have been filled, show the cost box
 	if (drawRoom == false) return;
+	showBox(costBox, true);
 	renderRoom();
 }
 

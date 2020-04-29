@@ -66,7 +66,7 @@ function renderRoom() {
 	// Create a cube with material on the inside only, gives the
 	// effect of looking through outer walls to inside of room
 	var geometry = new THREE.BoxBufferGeometry( wallWidth, wallHeight, roomDepth );
-	var material = new THREE.MeshStandardMaterial( { color: 0xf0f1f2, side: THREE.BackSide } );
+	var material = new THREE.MeshStandardMaterial( { color: 0xcdd7dc, side: THREE.BackSide } );
 	var mesh = new THREE.Mesh( geometry, material );
 
 	scene.add(mesh);
@@ -160,7 +160,7 @@ function renderRoom() {
 
 	// Draw a lectern
 	geometry = new THREE.BoxBufferGeometry( lectX, lectY, lectZ );
-	material = new THREE.MeshStandardMaterial( { color: 0x868375 } );
+	material = new THREE.MeshStandardMaterial( { color: 0xa1312b } );
 	mesh = new THREE.Mesh ( geometry, material );
 
 	// Move lectern to front of room

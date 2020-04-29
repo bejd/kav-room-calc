@@ -16,7 +16,31 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		}
 	});
 
+	debug();
 });
+
+
+// Quickly show the visualiser on refresh
+function debug() {
+	dimX = 5.5;
+	dimY = 2.98;
+	dimZ = 4.9;
+
+	lectX = 1.200;
+	lectY = 1.022;
+	lectZ = 0.700;
+
+
+	calculateRoom();
+
+	screenType = "pj";
+	if (screenWidth == undefined) setScreenSize(55);
+
+	drawRoom = true;
+	renderRoom();
+	showBox(visualiser, true);
+	showBox(costBox, true);
+}
 
 
 // Get the next elements in the form and add the class to show it
@@ -40,14 +64,13 @@ function unhideItems(ele, num) {
 }
 
 
-// Show or hide the visualiser
-function showVisualiser(opt) {
+// Show or hide hidden elements
+function showBox(ele, opt) {
 	if (opt) {
-		visualiser.classList.add("right-side");
+		ele.classList.add("show");
 	}
 
 	else if (!opt) {
-		visualiser.classList.remove("right-side");
+		ele.classList.remove("show");
 	}
-
 }
