@@ -13,8 +13,10 @@
 	<link rel="stylesheet" href="theme.css">
 
 	<script src="three.js"></script>
-	<!-- <script src="script-canvas.js"></script> -->
-	<script src="script-three.js"></script>
+	<script src="form.js"></script>
+	<script src="calc.js"></script>
+	<script src="visualiser.js"></script>
+	<script src="fluff.js"></script>
 </head>
 
 <body>
@@ -131,6 +133,10 @@
 			<p>Do you need a surface to write on?</p>
 			<div class="option-flex">
 				<label>
+					<input type="radio" id="surface-na" name="writing-surface" value="na">
+					Not needed
+				</label>
+				<label>
 					<input type="radio" id="surface-wbd" name="writing-surface" value="wbd">
 					Whiteboard
 				</label>
@@ -202,7 +208,6 @@
 
 	</div>
 
-	<!-- <canvas id="visualiser" width="600" height="400"></canvas> -->
 	<div id="visualiser">
 		<div class="cam-buttons">
 			<button value="iso">Default</button>
