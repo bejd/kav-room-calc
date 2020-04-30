@@ -17,16 +17,20 @@
 	<script src="calc.js"></script>
 	<script src="visualiser.js"></script>
 	<script src="fluff.js"></script>
+
 </head>
 
 <body>
 
 	<header>
-		<div>King's Audio Visual Room Calculator Thing</div>
+		<a href="/" class="logo"></a>
+		<div>Header navigation or whatever</div>
 		<button>Some button</button>
 	</header>
 
 	<div id="main">
+
+		<h1>Audio Visual new room cost calculator</h1>
 
 		<form id="form" autocomplete="off">
 
@@ -94,18 +98,6 @@
 				</label>
 			</div>
 
-			<p>Floor area</p>
-			<span id="floor-area">m&sup2;</span>
-
-			<p>Room volume</p>
-			<span id="room-volume">m&sup3;</span>
-
-			<p>Estimated capacity</p>
-			<span id="capacity"></span>
-
-			<p>Display position</p>
-			<input type="range" id="displayPosition" min="0" max="100" value="50">
-
 			<p>Do you need a visualiser?</p>
 			<div class="option-flex">
 				<label>
@@ -141,16 +133,16 @@
 					Whiteboard
 				</label>
 				<label>
-					<input type="radio" id="surface-bbd" name="writing-surface" value="bbd">
-					Blackboard
-				</label>
-				<label>
 					<input type="radio" id="surface-dg-wbd" name="writing-surface" value="dg-wbd">
 					Digital whiteboard
 				</label>
 			</div>
 
+			<p>Display position</p>
+			<input type="range" id="displayPosition" min="0" max="100" value="50">
+
 			<div class="debug-options">
+
 				<p>Type of display</p>
 				<div class="option-flex">
 					<label>
@@ -208,17 +200,28 @@
 
 	</div>
 
-	<div id="visualiser">
+	<div id="results-box">
 		<div class="cam-buttons">
 			<button value="iso">Default</button>
 			<button value="top">Top</button>
 			<button value="side">Side</button>
 			<button value="back">Back</button>
 		</div>
-	</div>
 
-	<div id="cost-box">
-		<p id="cost-estimate">Estimated cost: £10,000</p>
+		<div class="room-info">
+			<p>Floor area:</p>
+			<span id="floor-area">m&sup2;</span>
+
+			<p>Room volume:</p>
+			<span id="room-volume">m&sup3;</span>
+
+			<p>Estimated capacity:</p>
+			<span id="capacity"></span>
+		</div>
+
+		<div id="cost-box">
+			<p id="cost-estimate">Estimated cost: £10,000</p>
+		</div>
 	</div>
 
 	<dialog id="dialog">

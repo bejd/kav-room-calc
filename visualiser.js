@@ -4,7 +4,7 @@
 
 var cameraAngle;									// Camera angle
 var canvasHeight, canvasWidth;						// Canvas parameters
-var renderer, scene, visualiser;					// Main visualiser bits
+var renderer, scene, resultsBox;					// Main visualiser bits
 
 
 // When the page has loaded add functions to the camera view buttons and call
@@ -35,13 +35,13 @@ function setCamAngle(angle) {
 
 //Create the three.js renderer and scene
 function createScene() {
-	visualiser = document.getElementById("visualiser");
+	resultsBox = document.getElementById("results-box");
 
 	renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } );
 	scene = new THREE.Scene();
 
-	canvasWidth = visualiser.clientWidth;
-	canvasHeight = visualiser.clientHeight;
+	canvasWidth = resultsBox.clientWidth;
+	canvasHeight = resultsBox.clientHeight - 125; // account for other elements
 
 	// Setup scene and renderer and add to the DOM
 	renderer.setSize(canvasWidth, canvasHeight);
@@ -49,7 +49,7 @@ function createScene() {
 	renderer.shadowMap.enabled = true;
 	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-	visualiser.appendChild(renderer.domElement);
+	resultsBox.appendChild(renderer.domElement);
 }
 
 

@@ -23,7 +23,7 @@ function calculateCost(key, value) {
 	}
 
 	document.getElementById("cost-estimate").innerHTML =
-		"Estimated cost: "
+		"Estimated cost: £"
 		+ cost.toLocaleString();
 }
 

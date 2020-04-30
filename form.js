@@ -67,13 +67,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 			});
 		}
 
-		else if (input.id == "displayPosition") {
-			scrPos = input.value;
-			input.addEventListener("change", function() {
-				setDisplayPos(this.value);
-			});
-		}
-
 		else if (input.name == "equip-type") {
 			input.addEventListener("click", function() {
 				setEquipment(input, input.value);
@@ -89,6 +82,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		else if (input.name == "writing-surface") {
 			input.addEventListener("click", function() {
 				setWhiteboard(input, input.value);
+			});
+		}
+
+		else if (input.id == "displayPosition") {
+			scrPos = input.value;
+			input.addEventListener("change", function() {
+				setDisplayPos(this.value);
 			});
 		}
 
@@ -215,7 +215,7 @@ function setSize(ele, box, val) {
 		document.getElementById("room-volume").innerHTML = "m&sup3;";
 		document.getElementById("capacity").innerHTML = "";
 		drawRoom = false;
-		showBox(visualiser, false);
+		showBox(resultsBox, false);
 		clearScene();
 		return;
 	}
@@ -224,7 +224,7 @@ function setSize(ele, box, val) {
 	if (dimY == undefined || dimY == "") {
 		document.getElementById("room-volume").innerHTML = "m&sup3;";
 		drawRoom = false;
-		showBox(visualiser, false);
+		showBox(resultsBox, false);
 		clearScene();
 		return;
 	}
@@ -238,7 +238,7 @@ function setSize(ele, box, val) {
 
 	drawRoom = true;
 	renderRoom();
-	showBox(visualiser, true);
+	showBox(resultsBox, true);
 }
 
 
@@ -246,20 +246,11 @@ function setSize(ele, box, val) {
 function setMaterial(ele, mat) {
 	roomMat = mat;
 
-	unhideItems(ele, 10);
+	unhideItems(ele, 2);
 
 	// If any dimension values are yet to be filled, don't draw the scene
 	if (drawRoom == false) return;
 	calculateRoom();
-	renderRoom();
-}
-
-
-// Redraw the room when projector distance slider changes
-function setDisplayPos(value) {
-	scrPos = value;
-
-	if (drawRoom == false) return;
 	renderRoom();
 }
 
@@ -280,7 +271,7 @@ function setEquipment(ele, size) {
 		calculateCost("lectern", 5345.71);
 	}
 
-	unhideItems(ele, 5);
+	unhideItems(ele, 4);
 
 	if (drawRoom == false) return;
 	renderRoom();
@@ -300,9 +291,18 @@ function setLecternPosition(pos) {
 function setWhiteboard(ele, sel) {
 	whiteboard = sel;
 
-	// If all options have been filled, show the cost box
+	unhideItems(ele, 3);
+
 	if (drawRoom == false) return;
-	showBox(costBox, true);
+	renderRoom();
+}
+
+
+// Redraw the room when projector distance slider changes
+function setDisplayPos(value) {
+	scrPos = value;
+
+	if (drawRoom == false) return;
 	renderRoom();
 }
 

@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		}
 	});
 
-	debug();
+	// debug();
 });
 
 
@@ -38,8 +38,7 @@ function debug() {
 
 	drawRoom = true;
 	renderRoom();
-	showBox(visualiser, true);
-	showBox(costBox, true);
+	showBox(resultsBox, true);
 }
 
 

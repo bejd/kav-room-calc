@@ -24,27 +24,20 @@ header {
 }
 
 
-/* ------------------------------ Header layout ----------------------------- */
+/* --------------------------------- Header --------------------------------- */
 
 header {
 	display: grid;
-	grid-template-columns: auto 70px;
-	align-items: center;
-}
-
-header div {
-	justify-self: center;
-}
-
-header button {
-	justify-self: right;
+	grid-template-columns: auto 90px;
+	place-items: center;
 }
 
 
 /* ------------------------------- Form layout ------------------------------ */
 
 #main {
-	display: grid;
+	display: flex;
+	flex-direction: column;
 }
 
 
@@ -63,32 +56,11 @@ header button {
 }
 
 
-/* ----------------------------- Floating footer ---------------------------- */
-
-#cost-box {
-	width: 300px;
-
-	position: fixed;
-	bottom: 2em;
-	left: -310px;
-
-	transition: all 0.5s ease-in-out;
-}
-
-#cost-box p {
-	text-align: center;
-}
-
-#cost-box.show {
-	left: 2em;
-}
-
-
 /* --------------------------- Floating visualiser -------------------------- */
 
-#visualiser {
+#results-box {
 	width: 600px;
-	height: 600px;
+	height: 750px;
 
 	position: fixed;
 	bottom: 2em;
@@ -97,11 +69,11 @@ header button {
 	transition: all 0.5s ease-in-out;
 }
 
-#visualiser.show {
+#results-box.show {
 	right: 2em;
 }
 
-#visualiser canvas {
+#results-box canvas {
 	position: absolute;
 	top: 0;
 	z-index: -1;
@@ -110,6 +82,25 @@ header button {
 .cam-buttons {
 	display: flex;
 	justify-content: space-evenly;
+}
+
+.room-info {
+	position: absolute;
+	bottom: 75px;
+	width: 100%;
+
+	display: grid;
+	grid-template-columns: repeat(4, auto);
+	align-items: center;
+}
+
+#cost-box {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+
+	display: flex;
+	justify-content: space-around;
 }
 
 

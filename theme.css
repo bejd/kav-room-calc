@@ -15,12 +15,53 @@
 	src: url("res/KingsCaslon.ttf");
 }
 
+
+/* ------------------------------- Whole page ------------------------------- */
+
 body {
 	overflow-y: scroll;
 
 	font-family: "KingsBureauGrotFiveOne", sans-serif;
 	font-size: 18px;
 	color: #666666;
+}
+
+h1 {
+	margin-top: 5rem;
+	margin-left: 5rem;
+
+	font-family: "KingsBureauGrotThreeSeven", sans-serif;
+	font-size: 2.375rem;
+	font-weight: 400;
+	color: #000000;
+}
+
+span {
+	color: #899197;
+}
+
+
+/* --------------------------------- Buttons -------------------------------- */
+
+button {
+	border: none;
+	border-radius: 5px;
+	margin-bottom: 5px;
+	padding: 0.5em;
+	width: 75px;
+
+	box-shadow: 0 5px #464e52;
+	background-color: #5a6369;
+
+	font-family: "KingsBureauGrotThreeSeven", sans-serif;
+	color: #ffffff;
+
+	transition: all 0.5s ease-in-out;
+}
+
+button:hover {
+	background-color: #8b9296;
+	box-shadow: 0 5px #5a6369;
 }
 
 
@@ -35,24 +76,41 @@ header div {
 	color: #ffffff;
 }
 
+header button {
+	background-color: #e22319;
+	box-shadow: 0 5px #b61c14;
+
+}
+
+header button:hover {
+	background-color: #eb655e;
+	box-shadow: 0 5px #be4943;
+}
+
+.logo {
+	display: block;
+	height: 100px;
+	width: 130px;
+
+	position: absolute;
+	top: 0;
+	left: 5rem;
+
+	background: url(/res/kcl-logo.svg) center top no-repeat;
+}
+
 
 /* ------------------------------ Form styling ------------------------------ */
 
 #form {
 	width: 50em;
-	margin-left: 5em;
+	margin-left: 5rem;
 }
 
 #form p {
-	margin-top: 3em;
-
 	font-family: "KingsCaslonTextRegular", "Times New Roman", Times, serif;
 	font-size: 24px;
 	color: #0a2d50;
-}
-
-span {
-	color: #899197;
 }
 
 input[type=number]::-webkit-outer-spin-button,
@@ -88,22 +146,9 @@ input[type=range] {
 }
 
 
-/* ----------------------------- Footer styling ----------------------------- */
-
-#cost-box {
-	background-color: #0a2d50;
-	border-radius: 5px;
-
-	box-shadow: 0 5px 15px #00000040;
-
-	font-family: "KingsBureauGrotThreeSeven", sans-serif;
-	color: #ffffff;
-}
-
-
 /* --------------------------- Visualiser styling --------------------------- */
 
-#visualiser {
+#results-box {
 	background-color: #e6ebed;
 	border-radius: 5px;
 
@@ -117,35 +162,66 @@ input[type=range] {
 	font-size: 0.7em;
 }
 
-
-/* --------------------------------- Buttons -------------------------------- */
-
-#visualiser button {
-	border: none;
-	border-radius: 5px;
-	margin-bottom: 5px;
-	padding: 0.5em;
-	width: 75px;
-
-	box-shadow: 0 5px #464e52;
+.room-info {
 	background-color: #5a6369;
+	box-shadow: inset 0 15px 15px -15px #000;
 
 	font-family: "KingsBureauGrotThreeSeven", sans-serif;
 	color: #ffffff;
-
-	transition: all 0.5s ease-in-out;
 }
 
-#visualiser button:hover {
-	background-color: #8b9296;
-	box-shadow: 0 5px #5a6369;
+.room-info::before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: -5px;
+	width: 100%;
+	padding: 5px 0;
+
+	background-color: #e6ebed;
+	border-radius: 0 0 5px 5px;
 }
+
+.room-info > * {
+	margin: 1em;
+}
+
+.room-info span {
+	font-family: 'Segoe UI', Tahoma, sans-serif;
+	color: #e6ebed;
+}
+
+#cost-box {
+	background-color: #0a2d50;
+	border-radius: 0 0 5px 5px;
+	box-shadow: inset 0 15px 15px -15px #000;
+
+	font-family: "KingsBureauGrotThreeSeven", sans-serif;
+	font-size: 24px;
+	color: #ffffff;
+}
+
+#cost-box::before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: -5px;
+	width: 100%;
+	padding: 5px 0;
+
+	background-color: #5a6369;
+	border-radius: 0 0 5px 5px;
+}
+
 
 /* --------------------------------- Dialog --------------------------------- */
 
 dialog {
 	border: none;
+	border-radius: 5px;
+
 	box-shadow: 0 5px 15px #00000040;
+	background-color: #edf1f2;
 }
 
 dialog button {
