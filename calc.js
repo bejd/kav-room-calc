@@ -64,6 +64,12 @@ function setRoomData(roomData) {
 	var capacity = roomData["capacity"];
 	document.getElementById("capacity").innerHTML = capacity.toFixed(0) + " people";
 
+	var minViewer = roomData["viewer_dist_min"];
+	document.getElementById("min-viewer").value = minViewer;
+
+	var maxViewer = roomData["viewer_dist_max"];
+	document.getElementById("max-viewer").value = maxViewer;
+
 	var costPerSqM = 1000;
 	calculateCost("roomSize", area * costPerSqM);
 }

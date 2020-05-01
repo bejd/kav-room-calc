@@ -41,30 +41,6 @@ span {
 }
 
 
-/* --------------------------------- Buttons -------------------------------- */
-
-button {
-	border: none;
-	border-radius: 5px;
-	margin-bottom: 5px;
-	padding: 0.5em;
-	width: 75px;
-
-	box-shadow: 0 5px #464e52;
-	background-color: #5a6369;
-
-	font-family: "KingsBureauGrotThreeSeven", sans-serif;
-	color: #ffffff;
-
-	transition: all 0.5s ease-in-out;
-}
-
-button:hover {
-	background-color: #8b9296;
-	box-shadow: 0 5px #5a6369;
-}
-
-
 /* ----------------------------- Header styling ----------------------------- */
 
 header {
@@ -102,6 +78,11 @@ header button:hover {
 
 /* ------------------------------ Form styling ------------------------------ */
 
+#main {
+	align-items: center;
+}
+
+
 #form {
 	width: 50em;
 	margin-left: 5rem;
@@ -122,11 +103,21 @@ input[type=number]::-webkit-inner-spin-button {
 
 input[type=number] {
 	-moz-appearance: textfield;
+
+	padding: 3px 7px;
+	border: 3px solid #cdd7dc;
+	border-radius: 5px;
+
+	font-family: "KingsBureauGrotThreeSeven", sans-serif;
 }
 
 input[type=range] {
 	display: block;
 	width: 20em;
+}
+
+input[type=radio] {
+	margin-right: 0.5em;
 }
 
 .option-flex {
@@ -238,6 +229,33 @@ dialog button {
 
 .dialog-flex p {
 	width: 100%;
+}
+
+
+/* --------------------------------- Buttons -------------------------------- */
+
+button {
+	border: none;
+	border-radius: 5px;
+	margin-bottom: 5px;
+	padding: 0.5em;
+	width: 75px;
+
+	box-shadow: 0 5px #464e52;
+	background-color: #5a6369;
+
+	font-family: "KingsBureauGrotThreeSeven", sans-serif;
+	color: #ffffff;
+}
+
+button:hover {
+	background-color: #8b9296;
+	box-shadow: 0 5px #5a6369;
+}
+
+header button:active, button:active {
+	transform: translateY(5px);
+	box-shadow: none;
 }
 
 

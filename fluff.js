@@ -8,15 +8,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 	// Add class to show initial items. Items will be revealed as form is filled
 	// in by calling the unhideItems() function
-	formItems.forEach(child => {
-		if (formItems.indexOf(child) > 1) {
-			// child.style.display = "block";
-			child.classList.add("display-none");
-			child.classList.add("opacity-zero");
-		}
-	});
+	// formItems.forEach(child => {
+	// 	if (formItems.indexOf(child) > 1) {
+	// 		// child.style.display = "block";
+	// 		child.classList.add("display-none");
+	// 		child.classList.add("opacity-zero");
+	// 	}
+	// });
 
-	// debug();
+	debug();
 });
 
 

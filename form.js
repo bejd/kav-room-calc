@@ -73,15 +73,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
 			});
 		}
 
-		else if (input.name == "lect-pos") {
-			input.addEventListener("click", function() {
-				setLecternPosition(input.value);
-			});
-		}
-
 		else if (input.name == "writing-surface") {
 			input.addEventListener("click", function() {
 				setWhiteboard(input, input.value);
+			});
+		}
+
+		else if (input.name == "lect-pos") {
+			input.addEventListener("click", function() {
+				setLecternPosition(input.value);
 			});
 		}
 
@@ -232,12 +232,14 @@ function setSize(ele, box, val) {
 	unhideItems(ele, 2);
 
 	// Draw the room when all values have been supplied
-	calculateRoom();
-
-	if (screenWidth == undefined) setScreenSize(55);
-
+	if (screenWidth == undefined) setScreenSize(85);
+	if (screenType == undefined) setScreenType("pj");
 	drawRoom = true;
+
+	calculateRoom();
 	renderRoom();
+
+	if (whiteboard == undefined) return;
 	showBox(resultsBox, true);
 }
 
@@ -271,16 +273,7 @@ function setEquipment(ele, size) {
 		calculateCost("lectern", 5345.71);
 	}
 
-	unhideItems(ele, 4);
-
-	if (drawRoom == false) return;
-	renderRoom();
-}
-
-
-// Set the lectern position
-function setLecternPosition(pos) {
-	lectPos = pos;
+	unhideItems(ele, 2);
 
 	if (drawRoom == false) return;
 	renderRoom();
@@ -291,7 +284,19 @@ function setLecternPosition(pos) {
 function setWhiteboard(ele, sel) {
 	whiteboard = sel;
 
-	unhideItems(ele, 3);
+	unhideItems(ele, 5);
+
+	// Draw the room and show the results box when the form has been completed
+	if (drawRoom == false) return;
+
+	renderRoom();
+	showBox(resultsBox, true);
+}
+
+
+// Set the lectern position
+function setLecternPosition(pos) {
+	lectPos = pos;
 
 	if (drawRoom == false) return;
 	renderRoom();
