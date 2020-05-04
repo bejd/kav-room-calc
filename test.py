@@ -24,7 +24,7 @@ data["arbitrary_value"] = "foo"
 data["material"] = material
 
 data["capacity"] = (dim_x - 1) * (dim_z - 2)
-data["viewer_dist_min"] = 1.2
+data["viewer_dist_min"] = 1.8
 data["viewer_dist_max"] = dim_z - 1
 
 

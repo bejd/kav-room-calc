@@ -160,7 +160,7 @@ function renderRoom() {
 
 	// Draw a lectern
 	geometry = new THREE.BoxBufferGeometry( lectX, lectY, lectZ );
-	material = new THREE.MeshStandardMaterial( { color: 0xa1312b } );
+	material = new THREE.MeshStandardMaterial( { color: 0xb61c14 } );
 	mesh = new THREE.Mesh ( geometry, material );
 
 	// Move lectern to front of room
@@ -195,15 +195,15 @@ function renderRoom() {
 	// Draw plane to visualise viewer distances
 	var viewDepth = maxViewer - minViewer;
 
-	// geometry = new THREE.PlaneGeometry( wallWidth - 1, viewDepth, 1, 1 );
-	// material = new THREE.MeshStandardMaterial( { color: 0x86757f } );
-	// mesh = new THREE.Mesh( geometry, material );
+	geometry = new THREE.PlaneGeometry( wallWidth - 1, viewDepth, 1, 1 );
+	material = new THREE.MeshStandardMaterial( { color: 0x536c84 } );
+	mesh = new THREE.Mesh( geometry, material );
 
-	// mesh.rotateX( -90 * Math.PI / 180);
-	// mesh.position.y = (wallHeight / -2) + 0.01;
-	// mesh.position.z = - (roomDepth / 2) + (viewDepth / 2) + minViewer;
+	mesh.rotateX( -90 * Math.PI / 180);
+	mesh.position.y = (wallHeight / -2) + 0.01;
+	mesh.position.z = - (roomDepth / 2) + (viewDepth / 2) + minViewer;
 
-	// scene.add(mesh);
+	scene.add(mesh);
 
 
 	// Draw left and right speakers

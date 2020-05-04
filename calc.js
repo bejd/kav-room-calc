@@ -6,7 +6,6 @@ var costBox;
 var costsDict = {};									// Individual item costs
 
 
-
 document.addEventListener("DOMContentLoaded", (event) => {
 	costBox = document.getElementById("cost-box");
 });
@@ -55,19 +54,19 @@ function calculateRoom() {
 
 // Process the data received from the calculateRoom function.
 function setRoomData(roomData) {
-	var area = roomData["area"];
+	var area = Number(roomData["area"]);
 	document.getElementById("floor-area").innerHTML = +area.toFixed(2) + "m&sup2;";
 
-	var volume = roomData["volume"];
+	var volume = Number(roomData["volume"]);
 	document.getElementById("room-volume").innerHTML = +volume.toFixed(2) + "m&sup3;";
 
-	var capacity = roomData["capacity"];
+	var capacity = Number(roomData["capacity"]);
 	document.getElementById("capacity").innerHTML = capacity.toFixed(0) + " people";
 
-	var minViewer = roomData["viewer_dist_min"];
+	var minViewer = Number(roomData["viewer_dist_min"]);
 	document.getElementById("min-viewer").value = minViewer;
 
-	var maxViewer = roomData["viewer_dist_max"];
+	var maxViewer = Number(roomData["viewer_dist_max"]);
 	document.getElementById("max-viewer").value = maxViewer;
 
 	var costPerSqM = 1000;

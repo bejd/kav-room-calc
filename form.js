@@ -6,7 +6,7 @@ var dialog, optGroup;								// Error dialog
 var drawRoom = false;								// Prevent room drawing
 var lectPos, pjPos, scrPos;							// Object positions
 var lectX, lectY, lectZ;							// Lectern dimensions
-var maxViewer = 0, minViewer = 0;					// Viewer distances
+var maxViewer, minViewer;							// Viewer distances
 var roomMat;										// Wall material
 var screenHeight, screenType, screenWidth;			// Screen sizes
 var whiteboard;										// Additional equipment
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		}
 
 		else if (input.name == "viewer") {
-			input.addEventListener("click", function() {
+			input.addEventListener("input", function() {
 				setViewerDist(this.id, input.value);
 			});
 		}
@@ -383,10 +383,10 @@ function setProjectorPos(value) {
 // Store variables for minimum/maximum viewer distances
 function setViewerDist(box, dist) {
 	if (box == "min-viewer") {
-		minViewer = dist;
+		minViewer = Number(dist);
 	}
 	else if (box == "max-viewer") {
-		maxViewer = dist;
+		maxViewer = Number(dist);
 	}
 
 	if (drawRoom == false) return;

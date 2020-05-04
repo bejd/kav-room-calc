@@ -1,13 +1,15 @@
 /* --------------------------------- Colours -------------------------------- */
 
 :root {
-	--kcl-dark-blue:			#0a2d50;
-	--kcl-blue-grey-dark:		#464e52;
-	--kcl-blue-grey:			#5a6369;
-	--kcl-blue-grey-light-1:	#8b9296;
-	--kcl-blue-grey-light-2:	#cdd7dc;
-	--kcl-blue-grey-light-3:	#e6ebed;
-	--kcl-blue-grey-light-4:	#eff2f3;
+	--kcl-blue-dark:			#0a2d50;
+	--kcl-blue:					#3b5773;
+	--kcl-blue-light:			#536c84;
+	--kcl-bluegrey-dark:		#464e52;
+	--kcl-bluegrey:				#5a6369;
+	--kcl-bluegrey-light-1:		#8b9296;
+	--kcl-bluegrey-light-2:		#cdd7dc;
+	--kcl-bluegrey-light-3:		#e6ebed;
+	--kcl-bluegrey-light-4:		#eff2f3;
 	--kcl-grey:					#666666;
 	--kcl-red-darker:			#b61c14;
 	--kcl-red:					#e22319;
@@ -61,7 +63,7 @@ h1 {
 /* ----------------------------- Header styling ----------------------------- */
 
 header {
-	background-color: var(--kcl-blue-grey);
+	background-color: var(--kcl-bluegrey);
 }
 
 header div {
@@ -116,7 +118,7 @@ header button:hover {
 }
 
 #form p {
-	color: var(--kcl-dark-blue);
+	color: var(--kcl-blue-dark);
 
 	font-family: "KingsCaslonTextRegular", "Times New Roman", Times, serif;
 	font-size: 24px;
@@ -138,7 +140,7 @@ input[type=number] {
 	-moz-appearance: textfield;
 
 	padding: 3px 7px;
-	border: 3px solid var(--kcl-blue-grey-light-2);
+	border: 3px solid var(--kcl-bluegrey-light-2);
 	border-radius: 5px;
 
 	font-family: "KingsBureauGrotThreeSeven", sans-serif;
@@ -154,14 +156,14 @@ input[type=range]::-webkit-slider-runnable-track {
 	height: 20px;
 	border-radius: 25px;
 
-	background: var(--kcl-blue-grey-light-3);
+	background: var(--kcl-bluegrey-light-3);
 }
 
 input[type=range]::-moz-range-track {
 	height: 20px;
 	border-radius: 25px;
 
-	background: var(--kcl-blue-grey-light-3);
+	background: var(--kcl-bluegrey-light-3);
 }
 
 input[type=range]::-webkit-slider-thumb {
@@ -171,7 +173,7 @@ input[type=range]::-webkit-slider-thumb {
 	width: 20px;
 	border-radius: 50px;
 
-	background: var(--kcl-dark-blue);
+	background: var(--kcl-blue-dark);
 	box-shadow: 1.5px 1.5px 5px var(--kcl-shadow);
 }
 
@@ -181,12 +183,12 @@ input[type=range]::-moz-range-thumb {
 	border: none;
 	border-radius: 50px;
 
-	background: var(--kcl-dark-blue);
+	background: var(--kcl-blue-dark);
 	box-shadow: 1.5px 1.5px 5px var(--kcl-shadow);
 }
 
 input[type=range]:focus::-webkit-slider-runnable-track {
-	background: var(--kcl-blue-grey-light-4);
+	background: var(--kcl-bluegrey-light-4);
 }
 
 input[type=radio] {
@@ -217,7 +219,7 @@ input[type=radio] {
 #results-box {
 	border-radius: 5px;
 
-	background-color: var(--kcl-blue-grey-light-3);
+	background-color: var(--kcl-bluegrey-light-3);
 	box-shadow: 0 5px 15px var(--kcl-shadow);
 }
 
@@ -232,7 +234,7 @@ input[type=radio] {
 .room-info {
 	border-radius: 0 5px 0 0;
 
-	background-color: var(--kcl-blue-grey);
+	background-color: var(--kcl-bluegrey);
 	color: white;
 	box-shadow: inset 15px 0 15px -15px black;
 
@@ -256,7 +258,7 @@ input[type=radio] {
 }
 
 .room-info span {
-	color: var(--kcl-blue-grey-light-3);
+	color: var(--kcl-bluegrey-light-3);
 
 	font-family: 'Segoe UI', Tahoma, sans-serif;
 }
@@ -264,7 +266,7 @@ input[type=radio] {
 #cost-box {
 	border-radius: 0 0 5px 0;
 
-	background-color: var(--kcl-dark-blue);
+	background-color: var(--kcl-blue-dark);
 	color: white;
 	box-shadow: inset 15px 15px 15px -15px black;
 
@@ -287,7 +289,7 @@ input[type=radio] {
 	padding: 0 5px;
 	border-radius: 0 5px 0 0;
 
-	background-color: var(--kcl-blue-grey-light-3);
+	background-color: var(--kcl-bluegrey-light-3);
 
 	content: "";
 }
@@ -303,7 +305,7 @@ dialog {
 	border: none;
 	border-radius: 5px;
 
-	background-color: var(--kcl-blue-grey-light-3);
+	background-color: var(--kcl-bluegrey-light-3);
 	box-shadow: 0 5px 15px var(--kcl-shadow);
 }
 
@@ -327,16 +329,15 @@ dialog button {
 /* --------------------------------- Buttons -------------------------------- */
 
 button {
-	width: 4em;
-	height: 4em;
+	width: 4.5em;
 	padding: 0.5em;
 	border: none;
 	border-radius: 5px;
 	margin-bottom: 5px;
 
-	background-color: var(--kcl-blue-grey);
+	background-color: var(--kcl-bluegrey);
 	color: white;
-	box-shadow: 0 5px var(--kcl-blue-grey-dark);
+	box-shadow: 0 5px var(--kcl-bluegrey-dark);
 
 	font-family: "KingsBureauGrotThreeSeven", sans-serif;
 
@@ -344,8 +345,8 @@ button {
 }
 
 button:hover {
-	background-color: var(--kcl-blue-grey-light-1);
-	box-shadow: 0 5px var(--kcl-blue-grey);
+	background-color: var(--kcl-bluegrey-light-1);
+	box-shadow: 0 5px var(--kcl-bluegrey);
 }
 
 header button:active, button:active {
@@ -363,13 +364,13 @@ header button:active, button:active {
 
 	background: none;
 	box-shadow: none;
-	color: var(--kcl-blue-grey);
+	color: var(--kcl-bluegrey);
 
 	transition: transform 0.5s ease;
 }
 
 #shrink-results:hover {
-	color: var(--kcl-blue-grey);
+	color: var(--kcl-bluegrey);
 }
 
 #shrink-results:active {

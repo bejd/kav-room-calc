@@ -34,6 +34,8 @@ function debug() {
 	lectY = 1.022;
 	lectZ = 0.700;
 
+	minViewer = 1.8;
+	maxViewer = 3.5;
 
 	calculateRoom();
 
@@ -70,8 +72,14 @@ function unhideItems(ele, num) {
 // Show or hide hidden elements
 function showBox(ele, opt) {
 	if (opt) {
+		if (ele.classList.contains("show")) return;
+
 		ele.classList.add("show");
 		document.getElementById("main").classList.add("results-space");
+
+		setTimeout(() => {
+			window.scrollTo( { top: document.body.scrollHeight, behavior: "smooth" } );
+		}, 750);
 	}
 
 	else if (!opt) {
