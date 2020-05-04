@@ -40,8 +40,8 @@ function createScene() {
 	renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } );
 	scene = new THREE.Scene();
 
-	canvasWidth = resultsBox.clientWidth;
-	canvasHeight = resultsBox.clientHeight - 125; // account for other elements
+	canvasWidth = 600;
+	canvasHeight = 600; // account for other elements
 
 	// Setup scene and renderer and add to the DOM
 	renderer.setSize(canvasWidth, canvasHeight);

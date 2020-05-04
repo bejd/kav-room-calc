@@ -1,16 +1,20 @@
 // Visual effects that aren't important to functionality.
 
 var formItems;										// Array of form items
+var shrinkResults									// Hide the results form
 
 
 document.addEventListener("DOMContentLoaded", (event) => {
-	formItems = Array.from(document.getElementById("form").children);
+	shrinkResults = document.getElementById("shrink-results");
+	shrinkResults.addEventListener("click", function() {
+		shrinkVisualiser();
+	});
 
-	// Add class to show initial items. Items will be revealed as form is filled
+	// Add class to hide initial items. Items will be revealed as form is filled
 	// in by calling the unhideItems() function
+	// formItems = Array.from(document.getElementById("form").children);
 	// formItems.forEach(child => {
 	// 	if (formItems.indexOf(child) > 1) {
-	// 		// child.style.display = "block";
 	// 		child.classList.add("display-none");
 	// 		child.classList.add("opacity-zero");
 	// 	}
@@ -67,9 +71,19 @@ function unhideItems(ele, num) {
 function showBox(ele, opt) {
 	if (opt) {
 		ele.classList.add("show");
+		document.getElementById("main").classList.add("results-space");
 	}
 
 	else if (!opt) {
 		ele.classList.remove("show");
+		document.getElementById("main").classList.remove("results-space");
 	}
+}
+
+
+// Shrink the visualiser
+function shrinkVisualiser() {
+	shrinkResults.classList.toggle("rotate");
+	resultsBox.classList.toggle("shrink");
+	document.getElementById("main").classList.toggle("results-shrink");
 }
